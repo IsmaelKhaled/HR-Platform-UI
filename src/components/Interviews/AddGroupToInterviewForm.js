@@ -9,12 +9,12 @@ export default class AddGroupToInterviewForm extends Component {
       >
         <div className="col-6">
           <select
-            name="group"
+            name="selectedGroupId"
             className="form-select"
-            onChange={this.props.handleGroupSelectChange}
+            onChange={this.props.handleChange}
           >
             <option>---</option>
-            {this.props.groupSelect.map((group) => (
+            {this.props.groups.map((group) => (
               <option key={group.id} value={group.id}>
                 {group.name}
               </option>
@@ -26,7 +26,8 @@ export default class AddGroupToInterviewForm extends Component {
             className="form-check-input"
             type="checkbox"
             id="focus_group_check"
-            onChange={this.props.handleFocusGroupCheckChange}
+            name="focusGroupChecked"
+            onChange={this.props.handleChange}
           />
           <label className="form-check-label" htmlFor="focus_group_check">
             Focus Group?
@@ -35,7 +36,7 @@ export default class AddGroupToInterviewForm extends Component {
         <button
           type="submit"
           className="btn btn-primary col-2"
-          disabled={!this.props.selectedGroup}
+          disabled={!(this.props.selectedGroupId >= 0)}
         >
           Add Group
         </button>

@@ -1,60 +1,64 @@
 import React from "react";
-import AttributeGroup from "./AttributeGroup";
 import AddGroupToInterviewForm from "./AddGroupToInterviewForm";
+import { connect } from "react-redux";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import * as groupActions from "../../redux/actions/groupActions";
+import GroupsList from "./GroupsList";
 
 class CreateInterview extends React.Component {
   state = {
-    groupSelect: [
-      { id: 0, name: "Soft skills", attrs: ["Intelligence", "Humor"] },
-      { id: 1, name: "Technical attributes", attrs: ["C++", "C#"] },
-    ],
     focusGroups: [],
     additionalGroups: [],
-    selectedGroup: null,
+    selectedGroupId: -1,
     focusGroupChecked: false,
   };
 
-  handleGroupSelectChange = (e) => {
-    this.setState({
-      selectedGroup: this.state.groupSelect.find(
-        (x) => x.id === parseInt(e.target.value)
-      ),
-    });
-  };
+  componentDidMount() {
+    const { groups, actions } = this.props;
+
+    if (groups.length === 0) {
+      actions.loadGroups().catch((error) => {
+        alert("Loading groups failed: " + error);
+      });
+    }
+  }
 
   handleGroupAddSubmit = (e) => {
     e.preventDefault();
-    const group = this.state.selectedGroup;
+    const groupId = parseInt(this.state.selectedGroupId);
     let groups = this.state.focusGroups.concat(this.state.additionalGroups);
-    if (groups.filter((x) => x.id === group.id).length > 0) {
+    if (groups.filter((x) => x.id === groupId).length > 0) {
       alert("This group is already added!");
       return;
     }
     if (this.state.focusGroupChecked) {
-      this.setState({ focusGroups: [...this.state.focusGroups, group] });
+      this.setState({ focusGroups: [...this.state.focusGroups, groupId] });
     } else {
       this.setState({
-        additionalGroups: [...this.state.additionalGroups, group],
+        additionalGroups: [...this.state.additionalGroups, groupId],
       });
     }
   };
 
-  handleFocusGroupCheckChange = (e) => {
-    this.setState({ focusGroupChecked: e.target.checked });
-  };
-
-  handleNewAttrSubmit = (group) => {
-    let groups = this.state.groupSelect;
-    let selectedGroup = groups.find((x) => x.id === group.id);
-    selectedGroup.attrs = group.attrs;
-    this.setState({ groupSelect: groups });
+  handleAttrAdd = (group, attr) => {
+    this.props.actions.addAttribute(group, attr).catch((error) => {
+      alert("Adding attribute failed: " + error);
+    });
   };
 
   handleAttrRemove = (group, attr) => {
-    let groups = this.state.groupSelect;
-    let selectedGroup = groups.find((x) => x.id === group.id);
-    selectedGroup.attrs = group.attrs.filter((e) => e !== attr);
-    this.setState({ groupSelect: groups });
+    this.props.actions.removeAttribute(group, attr);
+  };
+
+  handleChange = (event) => {
+    const value =
+      event.target.type === "checkbox"
+        ? event.target.checked
+        : event.target.value;
+    this.setState({
+      ...this.state,
+      [event.target.name]: value,
+    });
   };
 
   render() {
@@ -63,48 +67,48 @@ class CreateInterview extends React.Component {
         <div className="container mt-4">
           <AddGroupToInterviewForm
             handleGroupAddSubmit={this.handleGroupAddSubmit}
-            handleFocusGroupCheckChange={this.handleFocusGroupCheckChange}
-            groupSelect={this.state.groupSelect}
-            handleGroupSelectChange={this.handleGroupSelectChange}
-            selectedGroup={this.state.selectedGroup}
+            groups={this.props.groups}
+            handleChange={this.handleChange}
+            selectedGroupId={this.state.selectedGroupId}
           />
 
           {/* Button to add a new group, currently not functional
           <button className="btn btn-success col-2 d-flex offset-2 mt-1">
             New Group
           </button> */}
-          <div className="list-group-flush">
-            {this.state.focusGroups.length > 0 && (
-              <div className="list-group-item card">
-                <h2>Focus Groups</h2>
-                {this.state.focusGroups.map((group) => (
-                  <AttributeGroup
-                    key={group.id}
-                    group={group}
-                    handleNewAttrSubmit={this.handleNewAttrSubmit}
-                    handleAttrRemove={this.handleAttrRemove}
-                  />
-                ))}
-              </div>
+          <GroupsList
+            focusGroups={this.state.focusGroups.map((groupId) =>
+              this.props.groups.find((group) => group.id === groupId)
             )}
-            {this.state.additionalGroups.length > 0 && (
-              <div className="list-group-item">
-                <h2>Additional Groups</h2>
-                {this.state.additionalGroups.map((group) => (
-                  <AttributeGroup
-                    key={group.id}
-                    group={group}
-                    handleNewAttrSubmit={this.handleNewAttrSubmit}
-                    handleAttrRemove={this.handleAttrRemove}
-                  />
-                ))}
-              </div>
+            additionalGroups={this.state.additionalGroups.map((groupId) =>
+              this.props.groups.find((group) => group.id === groupId)
             )}
-          </div>
+            handleNewAttrSubmit={this.handleAttrAdd}
+            handleAttrRemove={this.handleAttrRemove}
+          />
         </div>
       </>
     );
   }
 }
 
-export default CreateInterview;
+function mapStateToProps(state) {
+  return {
+    groups: state.groups,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      loadGroups: bindActionCreators(groupActions.loadGroups, dispatch),
+      addAttribute: bindActionCreators(groupActions.addAttribute, dispatch),
+      removeAttribute: bindActionCreators(
+        groupActions.removeAttribute,
+        dispatch
+      ),
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateInterview);

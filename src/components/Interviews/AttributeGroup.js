@@ -7,11 +7,7 @@ export class AttributeGroup extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let group = this.props.group;
-    let modifiedGroup = {
-      ...group,
-      attrs: [...group.attrs, this.state.attrInput],
-    };
-    this.props.handleNewAttrSubmit(modifiedGroup);
+    this.props.handleNewAttrSubmit(group, this.state.attrInput);
   };
   handleChange = (e) => {
     this.setState({ attrInput: e.target.value });
