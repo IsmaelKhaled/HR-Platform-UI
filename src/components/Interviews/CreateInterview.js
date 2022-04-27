@@ -7,9 +7,9 @@ import GroupsList from "./GroupsList";
 
 class CreateInterview extends React.Component {
   state = {
-    focusGroups: [],
-    additionalGroups: [],
-    selectedGroupId: -1,
+    focusGroupsIds: [],
+    additionalGroupsIds: [],
+    selectedGroupId: "",
     focusGroupChecked: false,
   };
 
@@ -25,29 +25,38 @@ class CreateInterview extends React.Component {
 
   handleGroupAddSubmit = (e) => {
     e.preventDefault();
-    const groupId = parseInt(this.state.selectedGroupId);
-    let groups = this.state.focusGroups.concat(this.state.additionalGroups);
-    if (groups.filter((x) => x.id === groupId).length > 0) {
+    const groupId = this.state.selectedGroupId;
+    let groupsIds = this.state.focusGroupsIds.concat(
+      this.state.additionalGroupsIds
+    );
+    if (groupsIds.filter((x) => x === groupId).length > 0) {
       alert("This group is already added!");
       return;
     }
     if (this.state.focusGroupChecked) {
-      this.setState({ focusGroups: [...this.state.focusGroups, groupId] });
+      this.setState({
+        focusGroupsIds: [...this.state.focusGroupsIds, groupId],
+      });
     } else {
       this.setState({
-        additionalGroups: [...this.state.additionalGroups, groupId],
+        additionalGroupsIds: [...this.state.additionalGroupsIds, groupId],
       });
     }
   };
 
   handleAttrAdd = (group, attr) => {
+    if (!attr) {
+      return;
+    }
     this.props.actions.addAttribute(group, attr).catch((error) => {
       alert("Adding attribute failed: " + error);
     });
   };
 
   handleAttrRemove = (group, attr) => {
-    this.props.actions.removeAttribute(group, attr);
+    this.props.actions.removeAttribute(group, attr).catch((error) => {
+      alert("Removing attribute failed: " + error);
+    });
   };
 
   handleChange = (event) => {
@@ -77,10 +86,10 @@ class CreateInterview extends React.Component {
             New Group
           </button> */}
           <GroupsList
-            focusGroups={this.state.focusGroups.map((groupId) =>
+            focusGroups={this.state.focusGroupsIds.map((groupId) =>
               this.props.groups.find((group) => group.id === groupId)
             )}
-            additionalGroups={this.state.additionalGroups.map((groupId) =>
+            additionalGroups={this.state.additionalGroupsIds.map((groupId) =>
               this.props.groups.find((group) => group.id === groupId)
             )}
             handleNewAttrSubmit={this.handleAttrAdd}

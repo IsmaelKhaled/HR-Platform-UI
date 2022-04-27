@@ -36,7 +36,7 @@ export default class AddGroupToInterviewForm extends Component {
         <button
           type="submit"
           className="btn btn-primary col-2"
-          disabled={!(this.props.selectedGroupId >= 0)}
+          disabled={!this.props.selectedGroupId}
         >
           Add Group
         </button>
