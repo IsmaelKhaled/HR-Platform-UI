@@ -22,21 +22,20 @@ export class AttributeGroup extends Component {
         <p className="fw-bold">{this.props.group.name}</p>
         <form onSubmit={this.handleSubmit} className="row d-flex mb-2">
           <div className="col-4">
-            <input
-              type="text"
-              name="new-attr"
-              key={this.props.group.id}
-              onChange={this.handleChange}
-              placeholder={`Add new attribute to ${this.props.group.name}`}
-              className="form-control col-4"
-            />
+            <div className="input-group">
+              <input
+                type="text"
+                name="new-attr"
+                key={this.props.group.id}
+                onChange={this.handleChange}
+                placeholder={`Add new attribute to ${this.props.group.name}`}
+                className="form-control col-4"
+              />
+              <button type="submit" className="btn btn-outline-success">
+                &#43;
+              </button>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="btn btn-warning d-inline-block col-1"
-          >
-            Add
-          </button>
         </form>
         <div className="list-group">
           {this.props.group.attrs.map((attr) => (
