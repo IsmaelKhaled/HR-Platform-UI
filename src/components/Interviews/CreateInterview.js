@@ -11,6 +11,7 @@ class CreateInterview extends React.Component {
     additionalGroupsIds: [],
     selectedGroupId: "",
     focusGroupChecked: false,
+    newGroupName: "",
   };
 
   componentDidMount() {
@@ -70,6 +71,13 @@ class CreateInterview extends React.Component {
     });
   };
 
+  handleCreateGroupSubmit = (e) => {
+    e.preventDefault();
+    this.props.actions.createGroup(this.state.newGroupName).catch((error) => {
+      alert("Creating new group failed: " + error);
+    });
+  };
+
   render() {
     return (
       <>
@@ -80,11 +88,22 @@ class CreateInterview extends React.Component {
             handleChange={this.handleChange}
             selectedGroupId={this.state.selectedGroupId}
           />
-
-          {/* Button to add a new group, currently not functional
-          <button className="btn btn-success col-2 d-flex offset-2 mt-1">
-            New Group
-          </button> */}
+          <form onSubmit={this.handleCreateGroupSubmit}>
+            <div className="col-4 mt-2">
+              <div className="input-group">
+                <input
+                  id="newGroupName"
+                  name="newGroupName"
+                  placeholder="Create new group"
+                  className="form-control"
+                  onChange={this.handleChange}
+                />
+                <button type="submit" className="btn btn-outline-success">
+                  Create
+                </button>
+              </div>
+            </div>
+          </form>
           <GroupsList
             focusGroups={this.state.focusGroupsIds.map((groupId) =>
               this.props.groups.find((group) => group.id === groupId)
@@ -116,6 +135,7 @@ function mapDispatchToProps(dispatch) {
         groupActions.removeAttribute,
         dispatch
       ),
+      createGroup: bindActionCreators(groupActions.createGroup, dispatch),
     },
   };
 }

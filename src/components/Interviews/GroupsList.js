@@ -8,7 +8,7 @@ export default class GroupsList extends Component {
         <div className="list-group-flush">
           {this.props.focusGroups.length > 0 && (
             <div className="list-group-item">
-              <h2>Focus Groups</h2>
+              <h3>Focus Groups</h3>
               {this.props.focusGroups.map((group) => (
                 <AttributeGroup
                   key={group.id}

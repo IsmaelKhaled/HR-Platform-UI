@@ -19,9 +19,14 @@ export class AttributeGroup extends Component {
   render() {
     return (
       <>
-        <p className="fw-bold">{this.props.group.name}</p>
-        <form onSubmit={this.handleSubmit} className="row d-flex mb-2">
-          <div className="col-4">
+        <div className="row align-items-center mt-2">
+          <p className="d-inline-block col-auto mb-0">
+            {this.props.group.name}
+          </p>
+          <form
+            onSubmit={this.handleSubmit}
+            className="row d-flex mb-2 ms-auto col-sm-6 col-xs"
+          >
             <div className="input-group">
               <input
                 type="text"
@@ -29,30 +34,28 @@ export class AttributeGroup extends Component {
                 key={this.props.group.id}
                 onChange={this.handleChange}
                 placeholder={`Add new attribute to ${this.props.group.name}`}
-                className="form-control col-4"
+                className="form-control"
               />
               <button type="submit" className="btn btn-outline-success">
                 &#43;
               </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
         <div className="list-group">
           {this.props.group.attrs.map((attr) => (
             <div
               key={attr}
-              className="list-group-item row justify-content-between d-flex"
+              className="list-group-item justify-content-between d-flex"
               style={{ borderLeft: "5px solid grey" }}
             >
-              <div className="col-10">{attr}</div>
-              <div className="btn-group col-2">
-                <button
-                  className="btn btn-danger"
-                  onClick={() => this.handleRemove(attr)}
-                >
-                  Delete
-                </button>
-              </div>
+              <div className="col-9">{attr}</div>
+              <button
+                className="btn btn-danger"
+                onClick={() => this.handleRemove(attr)}
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>

@@ -13,6 +13,8 @@ export default function courseReducer(state = initialState.groups, action) {
       );
     case types.LOAD_GROUPS_SUCCESS:
       return action.groups;
+    case types.CREATE_GROUP_SUCCESS:
+      return [...state, action.group];
     default:
       return state;
   }
