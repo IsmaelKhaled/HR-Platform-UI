@@ -25,7 +25,7 @@ export class AttributeGroup extends Component {
           </p>
           <form
             onSubmit={this.handleSubmit}
-            className="row d-flex mb-2 ms-auto col-sm-6 col-xs"
+            className="row d-flex mb-2 ms-md-auto col-sm-6 col-xs"
           >
             <div className="input-group">
               <input
