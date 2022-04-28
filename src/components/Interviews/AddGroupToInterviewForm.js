@@ -9,13 +9,13 @@ export default class AddGroupToInterviewForm extends Component {
             onSubmit={this.props.handleGroupAddSubmit}
             className="row align-items-center gy-2 gx-3"
           >
-            <div className="col-6">
+            <div className="col-md-6 col-12">
               <select
                 name="selectedGroupId"
                 className="form-select"
                 onChange={this.props.handleChange}
               >
-                <option>---</option>
+                <option value="">---</option>
                 {this.props.groups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.name}
@@ -37,10 +37,17 @@ export default class AddGroupToInterviewForm extends Component {
             </div>
             <button
               type="submit"
-              className="btn btn-primary col-sm-2 col-xs ms-auto me-4"
+              className="btn btn-primary col-md-2 col-xs ms-auto me-4"
               disabled={!this.props.selectedGroupId}
             >
               Add Group
+            </button>
+            <button
+              type="button"
+              className="btn btn-dark col-md-2 col-xs "
+              onClick={this.props.showModal}
+            >
+              Create group
             </button>
           </form>
         </div>
