@@ -15,7 +15,9 @@ export default class AddGroupToInterviewForm extends Component {
                 className="form-select"
                 onChange={this.props.handleChange}
               >
-                <option value="">---</option>
+                <option value="" className="text-muted">
+                  Select Group
+                </option>
                 {this.props.groups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.name}

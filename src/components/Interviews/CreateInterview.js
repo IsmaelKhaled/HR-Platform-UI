@@ -1,10 +1,12 @@
 import React from "react";
-import AddGroupToInterviewForm from "./AddGroupToInterviewForm";
 import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as groupActions from "../../redux/actions/groupActions";
+import * as interviewActions from "../../redux/actions/interviewActions";
+import { withRouter } from "../Common/withRouter";
 import GroupsList from "./GroupsList";
 import { Modal, Button } from "react-bootstrap";
+import AddGroupToInterviewForm from "./AddGroupToInterviewForm";
 
 class CreateInterview extends React.Component {
   state = {
@@ -14,6 +16,8 @@ class CreateInterview extends React.Component {
     focusGroupChecked: false,
     newGroupName: "",
     createModalShow: false,
+    interviewName: "",
+    interview: null,
   };
 
   componentDidMount() {
@@ -93,6 +97,25 @@ class CreateInterview extends React.Component {
     this.setState({ createModalShow: false });
   };
 
+  handleSave = () => {
+    const interview = {
+      name: this.state.interviewName,
+      groups: {
+        focus: this.state.focusGroupsIds,
+        additional: this.state.additionalGroupsIds,
+      },
+    };
+    console.log(interview);
+    this.props.actions
+      .saveInterview(interview)
+      .then(() => {
+        this.props.navigate("/interviews/");
+      })
+      .catch((error) => {
+        alert("Saving interview failed: " + error);
+      });
+  };
+
   render() {
     return (
       <>
@@ -104,6 +127,19 @@ class CreateInterview extends React.Component {
             selectedGroupId={this.state.selectedGroupId}
             showModal={this.showModal}
           />
+          <div className="input-group">
+            <input
+              type="text"
+              id="interviewName"
+              name="interviewName"
+              className="form-control"
+              value={this.state.interviewName}
+              onChange={this.handleChange}
+            />
+            <button className="btn btn-success" onClick={this.handleSave}>
+              Save Interview
+            </button>
+          </div>
 
           <GroupsList
             focusGroups={this.state.focusGroupsIds.map((groupId) =>
@@ -164,8 +200,15 @@ function mapDispatchToProps(dispatch) {
         dispatch
       ),
       createGroup: bindActionCreators(groupActions.createGroup, dispatch),
+      saveInterview: bindActionCreators(
+        interviewActions.saveInterview,
+        dispatch
+      ),
     },
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateInterview);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(CreateInterview));

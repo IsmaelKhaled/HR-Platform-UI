@@ -1,0 +1,54 @@
+{
+  "interviews": [
+    {
+      "id": "17fa833a-c6cc-4988-aba0-78c010178cc8",
+      "name": "Frontend Interview",
+      "groups": {
+        "focus": [
+          "17fa833a-c6cc-4988-aba0-78c010178cc8"
+        ],
+        "additional": [
+          "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1"
+        ]
+      }
+    },
+    {
+      "id": "17fa833a-c6cc-4988-aba0-78c010178cd8",
+      "name": "Backend Interview",
+      "groups": {
+        "focus": [
+          "17fa833a-c6cc-4988-aba0-78c010178cc8"
+        ],
+        "additional": [
+          "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1"
+        ]
+      }
+    },
+    {
+      "name": "Hello",
+      "groups": {
+        "focus": [],
+        "additional": []
+      },
+      "id": "32421454-433c-41bf-aace-9b43b62de7f1"
+    }
+  ],
+  "groups": [
+    {
+      "id": "17fa833a-c6cc-4988-aba0-78c010178cc9",
+      "name": "Technical attributes",
+      "attrs": [
+        "C++",
+        "C#"
+      ]
+    },
+    {
+      "id": "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1",
+      "name": "Soft skills",
+      "attrs": [
+        "Intelligence",
+        "Humor"
+      ]
+    }
+  ]
+}

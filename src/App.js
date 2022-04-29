@@ -5,6 +5,7 @@ import HomePage from "./components/HomePage/HomePage";
 import CreateInterview from "./components/Interviews/CreateInterview";
 import Sidebar from "./components/Common/Sidebar";
 import Navbar from "./components/Common/Navbar";
+import ListInterviews from "./components/Interviews/ListInterviews";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route path="/interviews/create/" element={<CreateInterview />} />
+              <Route exact path="/interviews" element={<ListInterviews />} />
             </Routes>
           </div>
         </div>
