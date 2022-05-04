@@ -79,14 +79,6 @@ server.listen(port, () => {
 
 // Centralized logic
 
-// Returns a URL friendly slug
-function createSlug(value) {
-  return value
-    .replace(/[^a-z0-9_]+/gi, "-")
-    .replace(/^-|-$/g, "")
-    .toLowerCase();
-}
-
 function validateInterview(interview) {
   console.log(interview);
   if (!interview.name) return "Interview name is required.";
