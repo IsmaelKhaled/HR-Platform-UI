@@ -54,6 +54,15 @@ server.post("/interviews", function (req, res, next) {
   }
 });
 
+server.put("/interviews/:id", function (req, res, next) {
+  const error = validateInterview(req.body);
+  if (error) {
+    res.status(400).send(error);
+  } else {
+    next();
+  }
+});
+
 server.put("/groups/:id", function (req, res, next) {
   console.log(req.body);
   next();

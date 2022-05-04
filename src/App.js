@@ -2,10 +2,10 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
 import HomePage from "./components/HomePage/HomePage";
-import CreateInterview from "./components/Interviews/CreateInterview";
 import Sidebar from "./components/Common/Sidebar";
 import Navbar from "./components/Common/Navbar";
-import ListInterviews from "./components/Interviews/ListInterviews";
+import ListInterviews from "./components/Interviews/InterviewListPage";
+import ManageInterview from "./components/Interviews/ManageInterviewPage";
 
 function App() {
   return (
@@ -17,7 +17,8 @@ function App() {
           <div className="container-fluid mt-3">
             <Routes>
               <Route exact path="/" element={<HomePage />} />
-              <Route path="/interviews/create/" element={<CreateInterview />} />
+              <Route path="/interviews/create/" element={<ManageInterview />} />
+              <Route path="/interviews/:id" element={<ManageInterview />} />
               <Route exact path="/interviews" element={<ListInterviews />} />
             </Routes>
           </div>

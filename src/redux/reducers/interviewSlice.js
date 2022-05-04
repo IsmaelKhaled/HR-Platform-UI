@@ -8,8 +8,12 @@ export default function interviewsReducer(
   switch (action.type) {
     case types.LOAD_INTERVIEWS_SUCCESS:
       return action.interviews;
-    case types.SAVE_INTERVIEW_SUCCESS:
+    case types.CREATE_INTERVIEW_SUCCESS:
       return [...state, action.interview];
+    case types.UPDATE_INTERVIEW_SUCCESS:
+      return state.map((interview) =>
+        interview.id === action.interview.id ? action.interview : interview
+      );
     default:
       return state;
   }

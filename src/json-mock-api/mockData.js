@@ -1,6 +1,6 @@
 const groups = [
   {
-    id: "17fa833a-c6cc-4988-aba0-78c010178cc9",
+    id: "17fa833a-c6cc-4988-aba0-78c010178cc8",
     name: "Technical attributes",
     attrs: ["C++", "C#"],
   },
@@ -13,7 +13,7 @@ const groups = [
 
 const interviews = [
   {
-    id: "17fa833a-c6cc-4988-aba0-78c010178cc8",
+    id: "17fa833a-c6cc-4988-aba0-78c010178cc9",
     name: "Frontend Interview",
     groups: {
       focus: ["17fa833a-c6cc-4988-aba0-78c010178cc8"],

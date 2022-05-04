@@ -6,7 +6,7 @@ export function getInterviews() {
 }
 
 export function saveInterview(interview) {
-  return fetch(`${baseUrl}/interviews`, {
+  return fetch(`${baseUrl}/interviews/${interview.id ? interview.id : ""}`, {
     method: interview.id ? "PUT" : "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({

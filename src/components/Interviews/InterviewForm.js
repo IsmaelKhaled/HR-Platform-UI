@@ -1,72 +1,75 @@
 import React, { Component } from "react";
+import GroupsList from "./GroupsList";
+import { Modal, Button } from "react-bootstrap";
+import AddGroupToInterviewForm from "./AddGroupToInterviewForm";
 
 export default class InterviewForm extends Component {
-  constructor({
-    interview,
-    groups,
-    onSave,
-    onChange,
-    handleGroupAddSubmit,
-    ...props
-  }) {}
   render() {
     return (
       <>
         <div className="container">
-          <AddGroupToInterviewForm
-            handleGroupAddSubmit={this.handleGroupAddSubmit}
-            groups={this.groups}
-            handleChange={this.onChange}
-            selectedGroupId={this.state.selectedGroupId}
-            showModal={this.showModal}
-          />
           <div className="input-group">
             <input
+              type="text"
               id="interview-name"
-              name="interviewName"
-              placeholder="Interview Name"
+              name="name"
               className="form-control"
-              onChange={this.props.handleChange}
-              value={this.interview.name}
+              value={this.props.interview.name}
+              onChange={this.props.handleInterviewChange}
             />
-            <button className="btn btn-success" onClick={this.handleSave}>
+            <button className="btn btn-success" onClick={this.props.onSave}>
               Save Interview
             </button>
           </div>
 
-          <GroupsList
-            focusGroups={this.state.focusGroupsIds.map((groupId) =>
-              this.props.groups.find((group) => group.id === groupId)
-            )}
-            additionalGroups={this.state.additionalGroupsIds.map((groupId) =>
-              this.props.groups.find((group) => group.id === groupId)
-            )}
-            handleNewAttrSubmit={this.handleAttrAdd}
-            handleAttrRemove={this.handleAttrRemove}
+          <AddGroupToInterviewForm
+            handleGroupAddSubmit={this.props.handleGroupAddSubmit}
+            groups={this.props.groups}
+            handleChange={this.props.onChange}
+            selectedGroupId={this.props.selectedGroupId}
+            showModal={this.props.showModal}
           />
 
-          <Modal show={this.state.createModalShow} onHide={this.hideModal}>
+          <GroupsList
+            focusGroups={this.props.interview.groups.focus.map((groupId) =>
+              this.props.groups.find((group) => group.id === groupId)
+            )}
+            additionalGroups={this.props.interview.groups.additional.map(
+              (groupId) =>
+                this.props.groups.find((group) => group.id === groupId)
+            )}
+            handleNewAttrSubmit={this.props.handleAttrAdd}
+            handleAttrRemove={this.props.handleAttrRemove}
+          />
+
+          <Modal
+            show={this.props.createModalShow}
+            onHide={this.props.hideModal}
+          >
             <Modal.Header closeButton>
               <Modal.Title>Create New Group</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <form onSubmit={this.handleCreateGroupSubmit}>
+              <form onSubmit={this.props.handleCreateGroupSubmit}>
                 <div className="input-group">
                   <input
                     id="newGroupName"
                     name="newGroupName"
                     placeholder="Group name"
                     className="form-control"
-                    onChange={this.handleChange}
+                    onChange={this.props.onChange}
                   />
                 </div>
               </form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={this.hideModal}>
+              <Button variant="secondary" onClick={this.props.hideModal}>
                 Close
               </Button>
-              <Button variant="primary" onClick={this.handleCreateGroupSubmit}>
+              <Button
+                variant="primary"
+                onClick={this.props.handleCreateGroupSubmit}
+              >
                 Submit
               </Button>
             </Modal.Footer>

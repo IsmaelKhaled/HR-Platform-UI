@@ -2,14 +2,21 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as interviewActions from "../../redux/actions/interviewActions";
+import * as groupActions from "../../redux/actions/groupActions";
+import { Link } from "react-router-dom";
 
 class ListInterviews extends Component {
   componentDidMount() {
-    const { interviews, actions } = this.props;
+    const { interviews, groups, actions } = this.props;
 
     if (interviews.length === 0) {
       actions.loadInterviews().catch((error) => {
         alert("Loading interviews failed: " + error);
+      });
+    }
+    if (groups.length === 0) {
+      actions.loadGroups().catch((error) => {
+        alert("Loading groups failed: " + error);
       });
     }
   }
@@ -35,7 +42,9 @@ class ListInterviews extends Component {
                   </td>
                   <td className="justify-content-end d-flex">
                     <div className="btn-group">
-                      <button className="btn btn-outline-success">Edit</button>
+                      <button className="btn btn-outline-success">
+                        <Link to={`/interviews/${interview.id}`}>Edit</Link>
+                      </button>
                       <button className="btn btn-outline-danger">Delete</button>
                     </div>
                   </td>
@@ -52,13 +61,18 @@ class ListInterviews extends Component {
 function mapStateToProps(state) {
   return {
     interviews: state.interviews,
+    groups: state.groups,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      loadInterviews: bindActionCreators(interviewActions.loadGroups, dispatch),
+      loadInterviews: bindActionCreators(
+        interviewActions.loadInterviews,
+        dispatch
+      ),
+      loadGroups: bindActionCreators(groupActions.loadGroups, dispatch),
     },
   };
 }
