@@ -24,6 +24,9 @@ class ListInterviews extends Component {
     return (
       <>
         <div className="container table-responsive">
+          <button className="btn btn-success d-flex ms-auto">
+            <Link to="/interviews/create">New Interview</Link>
+          </button>
           <table className="table table-striped table-hover">
             <thead>
               <tr>

@@ -44,22 +44,17 @@ export default class Sidebar extends Component {
               </a>
               <ul className="collapse list-unstyled" id="processSubmenu">
                 <li className="nav-item">
-                  <a
+                  {/* <a
                     href="#interviewsSubmenu"
                     data-bs-toggle="collapse"
                     aria-expanded="false"
                     className="dropdown-toggle"
                   >
                     Interviews
-                  </a>
-                  <ul className="collapse list-unstyled" id="interviewsSubmenu">
-                    <li className="nav-item">
-                      <Link to="/interviews/create">Create Interview</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/interviews">List Interviews</Link>
-                    </li>
-                  </ul>
+                  </a> */}
+                  <Link to="/interviews">Interviews</Link>
+                  {/* <ul className="collapse list-unstyled" id="interviewsSubmenu">
+                  </ul> */}
                 </li>
                 <li className="nav-item">
                   <Link to="/">Tests</Link>
