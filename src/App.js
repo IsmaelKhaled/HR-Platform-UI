@@ -2,7 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.scss";
 import HomePage from "./components/HomePage/HomePage";
-import Sidebar from "./components/Common/Sidebar";
+import Sidebar from "./components/Common/Sidebar/Sidebar";
 import Navbar from "./components/Common/Navbar";
 import ListInterviews from "./components/Interviews/InterviewListPage";
 import ManageInterview from "./components/Interviews/ManageInterviewPage";

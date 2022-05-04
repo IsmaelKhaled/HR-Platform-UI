@@ -24,9 +24,11 @@ class ListInterviews extends Component {
     return (
       <>
         <div className="container table-responsive">
-          <button className="btn btn-success d-flex ms-auto">
-            <Link to="/interviews/create">New Interview</Link>
-          </button>
+          <Link to="/interviews/create">
+            <button className="btn btn-success d-flex ms-auto">
+              New Interview
+            </button>
+          </Link>
           <table className="table table-striped table-hover">
             <thead>
               <tr>
@@ -45,9 +47,11 @@ class ListInterviews extends Component {
                   </td>
                   <td className="justify-content-end d-flex">
                     <div className="btn-group">
-                      <button className="btn btn-outline-success">
-                        <Link to={`/interviews/${interview.id}`}>Edit</Link>
-                      </button>
+                      <Link to={`/interviews/${interview.id}`}>
+                        <button className="btn btn-outline-success">
+                          Edit
+                        </button>
+                      </Link>
                       <button className="btn btn-outline-danger">Delete</button>
                     </div>
                   </td>
