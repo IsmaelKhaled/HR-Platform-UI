@@ -4,7 +4,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <>
-        <nav className="navbar navbar-light shadow-sm">
+        <nav className="navbar navbar-light bg-light shadow-sm sticky-top">
           <div className="container-fluid pe-3">
             <button
               className="navbar-toggler collapsed"

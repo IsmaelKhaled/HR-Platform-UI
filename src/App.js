@@ -7,14 +7,15 @@ import ListInterviews from "./components/Interviews/InterviewListPage";
 import ManageInterview from "./components/Interviews/ManageInterviewPage";
 import TestListPage from "./components/Tests/TestListPage";
 import TestManagePage from "./components/Tests/TestManagePage";
+import "./components/Common/Sidebar/Sidebar.scss";
 
 function App() {
   return (
     <Router>
       <div className="wrapper">
-        <Sidebar />
+        <Navbar />
         <div id="content" className="col">
-          <Navbar />
+          <Sidebar />
           <div className="container-fluid mt-3">
             <Routes>
               <Route exact path="/" element={<HomePage />} />

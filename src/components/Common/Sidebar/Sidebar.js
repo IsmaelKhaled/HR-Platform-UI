@@ -10,7 +10,7 @@ export default class Sidebar extends Component {
       <>
         <nav
           id="sidebar"
-          className="col-md-3 col-lg-2 col-12 collapse collapse-horizontal shadow navbar-expand"
+          className="col-md-3 col-lg-2 col-12 fixed-top collapse collapse-horizontal shadow"
         >
           <div className="sidebar-header">
             <h3>
