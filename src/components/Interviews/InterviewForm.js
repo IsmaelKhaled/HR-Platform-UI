@@ -1,9 +1,48 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import * as groupActions from "../../redux/actions/groupActions";
 import GroupsList from "./GroupsList";
-import { Modal, Button } from "react-bootstrap";
-import AddGroupToInterviewForm from "./AddGroupToInterviewForm";
+import GroupSelectForm from "./GroupSelectForm";
+import CreateGroupModal from "./CreateGroupModal";
 
-export default class InterviewForm extends Component {
+class InterviewForm extends Component {
+  state = {
+    createModalShow: false,
+    newGroupName: "",
+  };
+
+  handleChange = (event) => {
+    const value =
+      event.target.type === "checkbox"
+        ? event.target.checked
+        : event.target.value;
+    this.setState({
+      ...this.state,
+      [event.target.name]: value,
+    });
+  };
+
+  handleCreateGroupSubmit = (e) => {
+    e.preventDefault();
+    this.props.actions
+      .createGroup(this.state.newGroupName)
+      .then(() => {
+        this.setState({ createModalShow: false });
+      })
+      .catch((error) => {
+        alert("Creating new group failed: " + error);
+      });
+  };
+
+  showModal = () => {
+    this.setState({ createModalShow: true });
+  };
+
+  hideModal = () => {
+    this.setState({ createModalShow: false });
+  };
+
   render() {
     return (
       <>
@@ -22,12 +61,12 @@ export default class InterviewForm extends Component {
             </button>
           </div>
 
-          <AddGroupToInterviewForm
+          <GroupSelectForm
             handleGroupAddSubmit={this.props.handleGroupAddSubmit}
             groups={this.props.groups}
             handleChange={this.props.onChange}
             selectedGroupId={this.props.selectedGroupId}
-            showModal={this.props.showModal}
+            showModal={this.showModal}
           />
 
           <GroupsList
@@ -38,44 +77,33 @@ export default class InterviewForm extends Component {
               (groupId) =>
                 this.props.groups.find((group) => group.id === groupId)
             )}
-            handleNewAttrSubmit={this.props.handleAttrAdd}
-            handleAttrRemove={this.props.handleAttrRemove}
           />
 
-          <Modal
-            show={this.props.createModalShow}
-            onHide={this.props.hideModal}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Create New Group</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <form onSubmit={this.props.handleCreateGroupSubmit}>
-                <div className="input-group">
-                  <input
-                    id="newGroupName"
-                    name="newGroupName"
-                    placeholder="Group name"
-                    className="form-control"
-                    onChange={this.props.onChange}
-                  />
-                </div>
-              </form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={this.props.hideModal}>
-                Close
-              </Button>
-              <Button
-                variant="primary"
-                onClick={this.props.handleCreateGroupSubmit}
-              >
-                Submit
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <CreateGroupModal
+            hideModal={this.hideModal}
+            showModal={this.showModal}
+            show={this.state.createModalShow}
+            handleCreateGroupSubmit={this.handleCreateGroupSubmit}
+            onChange={this.handleChange}
+          />
         </div>
       </>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    groups: state.groups,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      createGroup: bindActionCreators(groupActions.createGroup, dispatch),
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InterviewForm);

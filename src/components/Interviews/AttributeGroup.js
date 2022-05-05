@@ -1,20 +1,29 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "@reduxjs/toolkit";
+import * as groupActions from "../../redux/actions/groupActions";
+import { connect } from "react-redux";
 
 export class AttributeGroup extends Component {
   state = {
     attrInput: "",
   };
-  handleSubmit = (e) => {
-    e.preventDefault();
-    let group = this.props.group;
-    this.props.handleNewAttrSubmit(group, this.state.attrInput);
-  };
   handleChange = (e) => {
     this.setState({ attrInput: e.target.value });
   };
+  handleSubmit = (e) => {
+    e.preventDefault();
+    let group = this.props.group;
+    this.props.actions
+      .addAttribute(group, this.state.attrInput)
+      .catch((error) => {
+        alert("Adding attribute failed: " + error);
+      });
+  };
   handleRemove = (attr) => {
     let group = this.props.group;
-    this.props.handleAttrRemove(group, attr);
+    this.props.actions.removeAttribute(group, attr).catch((error) => {
+      alert("Removing attribute failed: " + error);
+    });
   };
   render() {
     return (
@@ -64,4 +73,22 @@ export class AttributeGroup extends Component {
   }
 }
 
-export default AttributeGroup;
+function mapStateToProps(state) {
+  return {
+    groups: state.groups,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      addAttribute: bindActionCreators(groupActions.addAttribute, dispatch),
+      removeAttribute: bindActionCreators(
+        groupActions.removeAttribute,
+        dispatch
+      ),
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AttributeGroup);

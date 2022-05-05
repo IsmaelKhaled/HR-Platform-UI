@@ -11,7 +11,6 @@ class CreateInterview extends React.Component {
   state = {
     selectedGroupId: "",
     focusGroupChecked: false,
-    newGroupName: "",
     createModalShow: false,
     interview: this.props.interview,
   };
@@ -40,7 +39,7 @@ class CreateInterview extends React.Component {
   handleGroupAddSubmit = (e) => {
     e.preventDefault();
     const groupId = this.state.selectedGroupId;
-    let groupsIds = this.state.interview.groups.focus.concat(
+    const groupsIds = this.state.interview.groups.focus.concat(
       this.state.interview.groups.additional
     );
     if (groupsIds.filter((x) => x === groupId).length > 0) {
@@ -70,21 +69,6 @@ class CreateInterview extends React.Component {
     }
   };
 
-  handleAttrAdd = (group, attr) => {
-    if (!attr) {
-      return;
-    }
-    this.props.actions.addAttribute(group, attr).catch((error) => {
-      alert("Adding attribute failed: " + error);
-    });
-  };
-
-  handleAttrRemove = (group, attr) => {
-    this.props.actions.removeAttribute(group, attr).catch((error) => {
-      alert("Removing attribute failed: " + error);
-    });
-  };
-
   handleChange = (event) => {
     const value =
       event.target.type === "checkbox"
@@ -103,26 +87,6 @@ class CreateInterview extends React.Component {
         [event.target.name]: event.target.value,
       },
     });
-  };
-
-  handleCreateGroupSubmit = (e) => {
-    e.preventDefault();
-    this.props.actions
-      .createGroup(this.state.newGroupName)
-      .then(() => {
-        this.setState({ createModalShow: false });
-      })
-      .catch((error) => {
-        alert("Creating new group failed: " + error);
-      });
-  };
-
-  showModal = () => {
-    this.setState({ createModalShow: true });
-  };
-
-  hideModal = () => {
-    this.setState({ createModalShow: false });
   };
 
   handleSave = () => {
@@ -144,15 +108,9 @@ class CreateInterview extends React.Component {
           groups={this.props.groups}
           onSave={this.handleSave}
           onChange={this.handleChange}
-          handleGroupAddSubmit={this.handleGroupAddSubmit}
-          selectedGroupId={this.state.selectedGroupId}
-          handleAttrAdd={this.handleAttrAdd}
-          handleAttrRemove={this.handleAttrRemove}
-          handleCreateGroupSubmit={this.handleCreateGroupSubmit}
-          createModalShow={this.state.createModalShow}
-          showModal={this.showModal}
-          hideModal={this.hideModal}
           handleInterviewChange={this.handleInterviewChange}
+          selectedGroupId={this.state.selectedGroupId}
+          handleGroupAddSubmit={this.handleGroupAddSubmit}
         />
       </>
     );
@@ -181,12 +139,6 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       loadGroups: bindActionCreators(groupActions.loadGroups, dispatch),
-      addAttribute: bindActionCreators(groupActions.addAttribute, dispatch),
-      removeAttribute: bindActionCreators(
-        groupActions.removeAttribute,
-        dispatch
-      ),
-      createGroup: bindActionCreators(groupActions.createGroup, dispatch),
       saveInterview: bindActionCreators(
         interviewActions.saveInterview,
         dispatch

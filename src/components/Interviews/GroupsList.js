@@ -10,12 +10,7 @@ export default class GroupsList extends Component {
             <div className="list-group-item">
               <h3>Focus Groups</h3>
               {this.props.focusGroups.map((group) => (
-                <AttributeGroup
-                  key={group.id}
-                  group={group}
-                  handleNewAttrSubmit={this.props.handleNewAttrSubmit}
-                  handleAttrRemove={this.props.handleAttrRemove}
-                />
+                <AttributeGroup key={group.id} group={group} />
               ))}
             </div>
           )}
@@ -23,12 +18,7 @@ export default class GroupsList extends Component {
             <div className="list-group-item">
               <h2>Additional Groups</h2>
               {this.props.additionalGroups.map((group) => (
-                <AttributeGroup
-                  key={group.id}
-                  group={group}
-                  handleNewAttrSubmit={this.props.handleNewAttrSubmit}
-                  handleAttrRemove={this.props.handleAttrRemove}
-                />
+                <AttributeGroup key={group.id} group={group} />
               ))}
             </div>
           )}

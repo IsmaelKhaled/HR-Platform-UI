@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class AddGroupToInterviewForm extends Component {
+export default class GroupSelectForm extends Component {
   render() {
     return (
       <div className="card">
