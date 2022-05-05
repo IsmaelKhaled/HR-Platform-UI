@@ -58,9 +58,9 @@ const emptyInterview = {
 const emptyTest = {
   id: "",
   name: "",
-  acceptanceScore: null,
-  maxScore: null,
-  duration: null,
+  acceptanceScore: "",
+  maxScore: "",
+  duration: "",
   URL: "",
 };
 // Using CommonJS style export so we can consume via Node (without using Babel-node)

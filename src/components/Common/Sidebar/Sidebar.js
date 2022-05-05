@@ -16,7 +16,7 @@ export default class Sidebar extends Component {
             <h3>
               Luftborn HR Platform
               <button
-                className="btn btn-outline"
+                className="btn btn-outline-secondary"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar"

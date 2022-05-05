@@ -5,6 +5,7 @@ import * as groupActions from "../../redux/actions/groupActions";
 import GroupsList from "./GroupsList";
 import GroupSelectForm from "./GroupSelectForm";
 import CreateGroupModal from "./CreateGroupModal";
+import FormCard from "../Common/FormCard";
 
 class InterviewForm extends Component {
   state = {
@@ -44,9 +45,12 @@ class InterviewForm extends Component {
   };
 
   render() {
+    const title = this.props.interview.id
+      ? "Edit Interview"
+      : "Create Interview";
     return (
       <>
-        <div className="container">
+        <FormCard title={title}>
           <div className="input-group">
             <input
               type="text"
@@ -86,7 +90,7 @@ class InterviewForm extends Component {
             handleCreateGroupSubmit={this.handleCreateGroupSubmit}
             onChange={this.handleChange}
           />
-        </div>
+        </FormCard>
       </>
     );
   }

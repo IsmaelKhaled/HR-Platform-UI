@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as testActions from "../../redux/actions/testActions";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 class ListTests extends Component {
   componentDidMount() {
@@ -18,17 +19,25 @@ class ListTests extends Component {
     return (
       <>
         <div className="container table-responsive">
-          <Link to="/tests/create">
-            <button className="btn btn-outline-dark d-flex ms-auto mb-2">
+          <div className="d-flex">
+            <Button
+              variant="outline-dark"
+              as={Link}
+              to="/tests/create"
+              xs={1}
+              className="ms-auto mb-2"
+            >
               New Test
-            </button>
-          </Link>
+            </Button>
+          </div>
           {this.props.tests.length > 0 && (
             <table className="table table-hover">
               <thead className="table-dark">
                 <tr>
                   <th>Name</th>
-                  <th>Duration</th>
+                  <th>
+                    Duration <div className="text-muted">(in minutes)</div>
+                  </th>
                   <th>Acceptance Score</th>
                   <th></th>
                 </tr>
@@ -43,14 +52,14 @@ class ListTests extends Component {
                     </td>
                     <td className="justify-content-end d-flex">
                       <div className="btn-group">
-                        <Link to={`/tests/${test.id}`}>
-                          <button className="btn btn-outline-success">
-                            Edit
-                          </button>
-                        </Link>
-                        <button className="btn btn-outline-danger">
-                          Delete
-                        </button>
+                        <Button
+                          as={Link}
+                          to={`/tests/${test.id}`}
+                          variant="outline-success"
+                        >
+                          Edit
+                        </Button>
+                        <Button variant="outline-danger">Delete</Button>
                       </div>
                     </td>
                   </tr>

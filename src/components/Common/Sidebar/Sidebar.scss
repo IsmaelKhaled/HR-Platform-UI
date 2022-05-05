@@ -1,3 +1,5 @@
+@import "../../../styles/_colors.scss";
+
 .wrapper {
   display: flex;
   width: 100%;
@@ -5,7 +7,7 @@
 }
 
 #sidebar {
-  background: #7386d5;
+  background: $primary;
   color: #fff;
   min-height: 100vh;
   transition: width 0.35s ease;
@@ -17,7 +19,7 @@
 
   .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: $primary;
   }
 
   ul {
