@@ -25,12 +25,12 @@ class ListInterviews extends Component {
       <>
         <div className="container table-responsive">
           <Link to="/interviews/create">
-            <button className="btn btn-success d-flex ms-auto">
+            <button className="btn btn-outline-dark d-flex ms-auto mb-2">
               New Interview
             </button>
           </Link>
-          <table className="table table-striped table-hover">
-            <thead>
+          <table className="table table-hover">
+            <thead className="table-dark">
               <tr>
                 <th>Name</th>
                 <th>Groups</th>
