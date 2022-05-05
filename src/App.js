@@ -5,6 +5,7 @@ import Sidebar from "./components/Common/Sidebar/Sidebar";
 import Navbar from "./components/Common/Navbar";
 import ListInterviews from "./components/Interviews/InterviewListPage";
 import ManageInterview from "./components/Interviews/ManageInterviewPage";
+import TestListPage from "./components/Tests/TestListPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/interviews/create/" element={<ManageInterview />} />
               <Route path="/interviews/:id" element={<ManageInterview />} />
               <Route exact path="/interviews" element={<ListInterviews />} />
+              <Route exact path="/tests" element={<TestListPage />} />
             </Routes>
           </div>
         </div>

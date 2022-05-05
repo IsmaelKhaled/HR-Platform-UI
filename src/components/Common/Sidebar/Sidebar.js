@@ -47,7 +47,7 @@ export default class Sidebar extends Component {
                   <Link to="/interviews">Interviews</Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/">Tests</Link>
+                  <Link to="/tests">Tests</Link>
                 </li>
               </ul>
             </li>
