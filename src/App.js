@@ -7,15 +7,21 @@ import ListInterviews from "./components/Interviews/InterviewListPage";
 import ManageInterview from "./components/Interviews/ManageInterviewPage";
 import TestListPage from "./components/Tests/TestListPage";
 import TestManagePage from "./components/Tests/TestManagePage";
+import "./components/Common/Sidebar/Sidebar.scss";
 
 function App() {
   return (
     <Router>
       <div className="wrapper">
-        <Sidebar />
+        <Navbar />
         <div id="content" className="col">
-          <Navbar />
-          <div className="container-fluid mt-3">
+          <Sidebar />
+          <div
+            className="overlay"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebar.show, .overlay.show"
+          ></div>
+          <div className="container mt-3" id="page-content">
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route path="/interviews/create/" element={<ManageInterview />} />

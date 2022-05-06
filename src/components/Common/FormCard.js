@@ -4,7 +4,7 @@ export default class FormCard extends Component {
   render() {
     return (
       <>
-        <div className="card mb-3 shadow rounded b-0">
+        <div className="card mb-3 shadow rounded border-0">
           {(this.props.title || this.props.formText) && (
             <div className="card-header bg-primary text-white">
               {this.props.title && (

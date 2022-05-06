@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import "./Sidebar.scss";
 // eslint-disable-next-line no-unused-vars
 import { Collapse } from "bootstrap"; // Required for collapse to function
+import NavLink from "./NavLink";
 
 export default class Sidebar extends Component {
   render() {
@@ -10,28 +10,15 @@ export default class Sidebar extends Component {
       <>
         <nav
           id="sidebar"
-          className="col-md-3 col-lg-2 col-12 collapse collapse-horizontal shadow navbar-expand"
+          className="col-md-3 col-lg-2 col-12 collapse collapse-horizontal"
         >
           <div className="sidebar-header">
-            <h3>
-              Luftborn HR Platform
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar"
-                aria-controls="navbarToggleSidebar"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                Hide
-              </button>
-            </h3>
+            <h3>Luftborn HR Platform</h3>
           </div>
 
           <ul className="list-unstyled components shadow-sm">
             <li className="nav-item">
-              <Link to="/">Home</Link>
+              <NavLink to="/" label="Home" />
             </li>
             <li className="nav-item">
               <a
@@ -40,14 +27,14 @@ export default class Sidebar extends Component {
                 aria-expanded="false"
                 className="dropdown-toggle"
               >
-                Process
+                <div className="link-overlay">Process</div>
               </a>
               <ul className="collapse list-unstyled" id="processSubmenu">
                 <li className="nav-item">
-                  <Link to="/interviews">Interviews</Link>
+                  <NavLink to="/interviews" label="Interviews" />
                 </li>
                 <li className="nav-item">
-                  <Link to="/tests">Tests</Link>
+                  <NavLink to="/tests" label="Tests" />
                 </li>
               </ul>
             </li>

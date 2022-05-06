@@ -48,7 +48,7 @@ class TestManagePage extends Component {
   render() {
     return (
       <>
-        <div className="container col-md-6 col-12 ms-0">
+        <div className="container col-md-6 col-12">
           <TestForm
             test={this.state.test}
             onChange={this.handleChange}

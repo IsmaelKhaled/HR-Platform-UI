@@ -4,13 +4,16 @@ export default class Navbar extends Component {
   render() {
     return (
       <>
-        <nav className="navbar navbar-light shadow-sm">
+        <nav
+          className="navbar navbar-light bg-light shadow-sm sticky-top"
+          id="topnav"
+        >
           <div className="container-fluid pe-3">
             <button
               className="navbar-toggler collapsed"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target="#sidebar"
+              data-bs-target="#sidebar,.overlay"
               aria-controls="navbarToggleSidebar"
               aria-expanded="false"
               aria-label="Toggle navigation"
