@@ -5,7 +5,7 @@ import * as testActions from "../../redux/actions/testActions";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import CenteredModal from "../Common/CenteredModal";
-import ListTable from "../Common/ListTable/ListTable";
+import ListTable from "../Common/ListTable";
 
 class ListTests extends Component {
   state = {

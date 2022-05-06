@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import TestForm from "./TestForm";
-import { withRouter } from "../Common/withRouter";
+import { withRouter } from "../Common/Wrappers/withRouter";
 import { emptyTest } from "../../json-mock-api/mockData";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as testActions from "../../redux/actions/testActions";

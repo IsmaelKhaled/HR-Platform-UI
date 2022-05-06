@@ -4,7 +4,7 @@ import { bindActionCreators } from "@reduxjs/toolkit";
 import * as interviewActions from "../../redux/actions/interviewActions";
 import * as groupActions from "../../redux/actions/groupActions";
 import { Link } from "react-router-dom";
-import ListTable from "../Common/ListTable/ListTable";
+import ListTable from "../Common/ListTable";
 import CenteredModal from "../Common/CenteredModal";
 import { Button } from "react-bootstrap";
 
