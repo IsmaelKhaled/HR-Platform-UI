@@ -5,7 +5,7 @@ import * as interviewActions from "../../redux/actions/interviewActions";
 import * as groupActions from "../../redux/actions/groupActions";
 import { Link } from "react-router-dom";
 import ListTable from "../Common/ListTable/ListTable";
-import RowDetailsModal from "../Common/ListTable/RowDetailsModal";
+import CenteredModal from "../Common/CenteredModal";
 import { Button } from "react-bootstrap";
 
 class ListInterviews extends Component {
@@ -42,11 +42,17 @@ class ListInterviews extends Component {
   render() {
     return (
       <>
-        <Link to="/interviews/create">
-          <button className="btn btn-outline-dark d-flex ms-auto mb-2">
+        <div className="d-flex">
+          <Button
+            variant="outline-dark"
+            as={Link}
+            to="/interviews/create"
+            xs={1}
+            className="ms-auto mb-2"
+          >
             New Interview
-          </button>
-        </Link>
+          </Button>
+        </div>
         {this.props.interviews.length > 0 && (
           <ListTable>
             <ListTable.Header>
@@ -86,7 +92,7 @@ class ListInterviews extends Component {
             </ListTable.Body>
           </ListTable>
         )}
-        <RowDetailsModal
+        <CenteredModal
           show={this.state.detailsModalShown}
           title={this.state.detailsModalObject.name}
           onHide={this.hideDetailsModal}
@@ -113,7 +119,7 @@ class ListInterviews extends Component {
               </ul>
             </li>
           </ul>
-        </RowDetailsModal>
+        </CenteredModal>
       </>
     );
   }
