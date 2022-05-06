@@ -1,15 +1,14 @@
 @import "../../../styles/_colors.scss";
 
-
 #sidebar {
   background: $primary;
   color: #fff;
   min-height: 100vh;
   transition: width 0.35s ease;
 
-  .link-overlay{
-    width:100%;
-    height:100%;  
+  .link-overlay {
+    width: 100%;
+    height: 100%;
     padding: 10px;
   }
 
