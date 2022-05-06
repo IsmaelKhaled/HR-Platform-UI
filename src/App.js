@@ -4,7 +4,7 @@ import HomePage from "./components/HomePage/HomePage";
 import Sidebar from "./components/Common/Sidebar/Sidebar";
 import Navbar from "./components/Common/Navbar";
 import ListInterviews from "./components/Interviews/InterviewListPage";
-import ManageInterview from "./components/Interviews/ManageInterviewPage";
+import ManageInterview from "./components/Interviews/InterviewManagePage";
 import TestListPage from "./components/Tests/TestListPage";
 import TestManagePage from "./components/Tests/TestManagePage";
 import "./components/Common/Sidebar/Sidebar.scss";

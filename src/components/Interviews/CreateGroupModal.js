@@ -5,7 +5,7 @@ export default class CreateGroupModal extends Component {
   render() {
     return (
       <>
-        <Modal show={this.props.show} onHide={this.props.hideModal}>
+        <Modal show={this.props.show} onHide={this.props.hideModal} centered>
           <Modal.Header closeButton>
             <Modal.Title>Create New Group</Modal.Title>
           </Modal.Header>

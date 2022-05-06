@@ -7,7 +7,7 @@ import { withRouter } from "../Common/withRouter";
 import InterviewForm from "./InterviewForm";
 import { emptyInterview } from "../../json-mock-api/mockData";
 
-class CreateInterview extends React.Component {
+class ManageInterview extends React.Component {
   state = {
     selectedGroupId: "",
     focusGroupChecked: false,
@@ -152,5 +152,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(CreateInterview)
+  connect(mapStateToProps, mapDispatchToProps)(ManageInterview)
 );

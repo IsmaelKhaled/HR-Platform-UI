@@ -4,8 +4,27 @@ import { bindActionCreators } from "@reduxjs/toolkit";
 import * as interviewActions from "../../redux/actions/interviewActions";
 import * as groupActions from "../../redux/actions/groupActions";
 import { Link } from "react-router-dom";
+import ListTable from "../Common/ListTable/ListTable";
+import RowDetailsModal from "../Common/ListTable/RowDetailsModal";
+import { Button } from "react-bootstrap";
 
 class ListInterviews extends Component {
+  state = {
+    detailsModalShown: false,
+    detailsModalObject: {},
+  };
+  showDetailsModal = (obj) => {
+    this.setState({
+      detailsModalShown: true,
+      detailsModalObject: obj,
+    });
+  };
+
+  hideDetailsModal = () => {
+    this.setState({
+      detailsModalShown: false,
+    });
+  };
   componentDidMount() {
     const { interviews, groups, actions } = this.props;
 
@@ -23,43 +42,78 @@ class ListInterviews extends Component {
   render() {
     return (
       <>
-        <div className="container table-responsive">
-          <Link to="/interviews/create">
-            <button className="btn btn-outline-dark d-flex ms-auto mb-2">
-              New Interview
-            </button>
-          </Link>
-          <table className="table table-hover">
-            <thead className="table-dark">
+        <Link to="/interviews/create">
+          <button className="btn btn-outline-dark d-flex ms-auto mb-2">
+            New Interview
+          </button>
+        </Link>
+        {this.props.interviews.length > 0 && (
+          <ListTable>
+            <ListTable.Header>
               <tr>
                 <th>Name</th>
                 <th>Groups</th>
                 <th></th>
               </tr>
-            </thead>
-            <tbody className="align-middle">
+            </ListTable.Header>
+            <ListTable.Body>
               {this.props.interviews.map((interview) => (
-                <tr key={interview.id}>
+                <tr
+                  key={interview.id}
+                  onClick={() => this.showDetailsModal(interview)}
+                >
                   <td>{interview.name}</td>
                   <td>
                     {interview.groups.focus.length +
                       interview.groups.additional.length}
                   </td>
-                  <td className="justify-content-end d-flex">
-                    <div className="btn-group">
-                      <Link to={`/interviews/${interview.id}`}>
-                        <button className="btn btn-outline-success">
+                  <td>
+                    <div className="d-flex justify-content-end">
+                      <div className="btn-group">
+                        <Button
+                          as={Link}
+                          to={`/interviews/${interview.id}`}
+                          variant="outline-success"
+                        >
                           Edit
-                        </button>
-                      </Link>
-                      <button className="btn btn-outline-danger">Delete</button>
+                        </Button>
+                        <Button variant="outline-danger">Delete</Button>
+                      </div>
                     </div>
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </ListTable.Body>
+          </ListTable>
+        )}
+        <RowDetailsModal
+          show={this.state.detailsModalShown}
+          title={this.state.detailsModalObject.name}
+          onHide={this.hideDetailsModal}
+        >
+          <ul>
+            <li>
+              Focus Groups:{" "}
+              <ul>
+                {this.state.detailsModalObject.groups?.focus.map((group) => (
+                  <li>{this.props.groups.find((x) => x.id === group).name}</li>
+                ))}
+              </ul>
+            </li>
+            <li>
+              Additional Groups:{" "}
+              <ul>
+                {this.state.detailsModalObject.groups?.additional.map(
+                  (group) => (
+                    <li>
+                      {this.props.groups.find((x) => x.id === group).name}
+                    </li>
+                  )
+                )}
+              </ul>
+            </li>
+          </ul>
+        </RowDetailsModal>
       </>
     );
   }
