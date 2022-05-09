@@ -9,3 +9,17 @@ export function getProcesses() {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function saveProcess(process) {
+  return axios({
+    url: `${baseUrl}/processes/${process.id ? process.id : ""}`,
+    method: process.id ? "PUT" : "POST",
+    headers: { "content-type": "application/json" },
+    data: {
+      ...process,
+      id: process.id ? process.id : crypto.randomUUID(),
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

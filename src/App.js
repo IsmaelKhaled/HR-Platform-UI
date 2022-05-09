@@ -9,6 +9,7 @@ import TestListPage from "./components/Tests/TestListPage";
 import TestManagePage from "./components/Tests/TestManagePage";
 import "./components/Common/Sidebar/Sidebar.scss";
 import ProcessListPage from "./components/Processes/ProcessListPage";
+import ProcessManagePage from "./components/Processes/ProcessManagePage";
 
 function App() {
   return (
@@ -40,6 +41,16 @@ function App() {
               <Route exact path="/tests/:id" element={<TestManagePage />} />
               <Route exact path="/tests" element={<TestListPage />} />
               <Route exact path="/processes" element={<ProcessListPage />} />
+              <Route
+                exact
+                path="/processes/create"
+                element={<ProcessManagePage />}
+              />
+              <Route
+                exact
+                path="/processes/:id"
+                element={<ProcessManagePage />}
+              />
             </Routes>
           </div>
         </div>
