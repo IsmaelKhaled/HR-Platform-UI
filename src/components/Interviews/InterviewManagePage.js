@@ -118,17 +118,10 @@ export function getInterviewById(interviews, id) {
   return interviews.find((interview) => interview.id === id) || null;
 }
 
-function mapStateToProps(state, ownProps) {
-  const interviewId = ownProps.params?.id;
-  const interview =
-    interviewId && state.interviews.length > 0
-      ? getInterviewById(state.interviews, interviewId)
-      : emptyInterview;
-
+function mapStateToProps(state) {
   return {
     groups: state.groups,
     interviews: state.interviews,
-    interview,
   };
 }
 

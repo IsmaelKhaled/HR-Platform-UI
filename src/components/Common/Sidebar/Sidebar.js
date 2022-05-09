@@ -26,7 +26,7 @@ export default function Sidebar() {
               aria-expanded="false"
               className="dropdown-toggle"
             >
-              <div className="link-overlay">Process</div>
+              <div className="link-overlay">Recruitment</div>
             </a>
             <ul className="collapse list-unstyled" id="processSubmenu">
               <li className="nav-item">
@@ -34,6 +34,9 @@ export default function Sidebar() {
               </li>
               <li className="nav-item">
                 <NavLink to="/tests" label="Tests" />
+              </li>
+              <li className="nav-item">
+                <NavLink to="/processes" label="Processes" />
               </li>
             </ul>
           </li>

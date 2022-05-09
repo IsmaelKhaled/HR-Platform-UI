@@ -3,4 +3,5 @@ export default {
   groups: [],
   interviews: [],
   tests: [],
+  processes: [],
 };

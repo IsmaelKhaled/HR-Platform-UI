@@ -49,6 +49,29 @@ const tests = [
   },
 ];
 
+const processes = [
+  {
+    id: "c1024b53-2cff-459a-ba89-9fe667bbc51a",
+    name: "Junior Frontend Developer Process",
+    description:
+      "The process for a Junior Frontend Developer position at Luftborn.",
+    steps: {
+      tests: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cc8", priority: 1 }],
+      interviews: [{ id: "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1", priority: 2 }],
+    },
+  },
+  {
+    id: "481148d3-d67e-492d-a7bd-660c3a73d9f0",
+    name: "Junior Backend Developer Process",
+    description:
+      "The process for a Junior Backend Developer position at Luftborn.",
+    steps: {
+      tests: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cc8", priority: 1 }],
+      interviews: [{ id: "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1", priority: 2 }],
+    },
+  },
+];
+
 const emptyInterview = {
   id: "",
   name: "",
@@ -63,6 +86,16 @@ const emptyTest = {
   duration: "",
   URL: "",
 };
+
+const emptyProcess = {
+  id: "",
+  name: "",
+  description: "",
+  steps: {
+    tests: [],
+    interviews: [],
+  },
+};
 // Using CommonJS style export so we can consume via Node (without using Babel-node)
 module.exports = {
   interviews,
@@ -70,4 +103,6 @@ module.exports = {
   emptyInterview,
   tests,
   emptyTest,
+  processes,
+  emptyProcess,
 };
