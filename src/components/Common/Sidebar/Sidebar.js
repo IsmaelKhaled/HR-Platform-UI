@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import "./Sidebar.scss";
 // eslint-disable-next-line no-unused-vars
 import { Collapse } from "bootstrap"; // Required for collapse to function
 import NavLink from "./NavLink";
 
-export default class Sidebar extends Component {
-  render() {
-    return (
-      <>
+export default function Sidebar() {
+  return (
+    <>
         <nav
           id="sidebar"
           className="col-md-3 col-lg-2 col-12 collapse collapse-horizontal"
@@ -47,6 +46,5 @@ export default class Sidebar extends Component {
           </ul>
         </nav>
       </>
-    );
-  }
+  )
 }

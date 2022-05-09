@@ -1,31 +1,29 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class NumberInput extends Component {
-  render() {
-    return (
-      <div className="row g-2 align-items-center">
+export default function NumberInput(props) {
+  return (
+    <div className="row g-2 align-items-center">
         <div className="col-12">
-          <label htmlFor={this.props.name}>
-            {this.props.label}{" "}
-            {this.props.required && <span className="text-danger">*</span>}
+          <label htmlFor={props.name}>
+            {props.label}{" "}
+            {props.required && <span className="text-danger">*</span>}
           </label>
         </div>
         <div className="col-12">
           <input
             className="form-control"
             type="number"
-            name={this.props.name}
-            value={this.props.value}
-            onChange={this.props.onChange}
-            placeholder={this.props.placeholder}
-            step={this.props.step}
-            max={this.props.max}
+            name={props.name}
+            value={props.value}
+            onChange={props.onChange}
+            placeholder={props.placeholder}
+            step={props.step}
+            max={props.max}
           />
-          {this.props.error && (
-            <div className="alert alert-danger">{this.props.error}</div>
+          {props.error && (
+            <div className="alert alert-danger">{props.error}</div>
           )}
         </div>
       </div>
-    );
-  }
+  )
 }

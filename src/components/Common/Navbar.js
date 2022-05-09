@@ -1,9 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class Navbar extends Component {
-  render() {
-    return (
-      <>
+export default function Navbar() {
+  return (
+    <>
         <nav
           className="navbar navbar-light bg-light shadow-sm sticky-top"
           id="topnav"
@@ -35,6 +34,5 @@ export default class Navbar extends Component {
           </div>
         </nav>
       </>
-    );
-  }
+  )
 }

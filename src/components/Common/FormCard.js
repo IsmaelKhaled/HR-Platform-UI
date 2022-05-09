@@ -1,23 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class FormCard extends Component {
-  render() {
-    return (
-      <>
+export default function FormCard(props) {
+  return (
+    <>
         <div className="card mb-3 shadow rounded border-0">
-          {(this.props.title || this.props.formText) && (
+          {(props.title || props.formText) && (
             <div className="card-header bg-primary text-white">
-              {this.props.title && (
-                <h3 className="card-title">{this.props.title}</h3>
+              {props.title && (
+                <h3 className="card-title">{props.title}</h3>
               )}
-              {this.props.formText && (
-                <div className="form-text">{this.props.formText}</div>
+              {props.formText && (
+                <div className="form-text">{props.formText}</div>
               )}
             </div>
           )}
-          <div className="card-body">{this.props.children}</div>
+          <div className="card-body">{props.children}</div>
         </div>
       </>
-    );
-  }
+  )
 }

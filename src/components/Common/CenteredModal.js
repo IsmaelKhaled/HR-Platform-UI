@@ -1,26 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 import { Button, Modal } from "react-bootstrap";
 
-export default class CenteredModal extends Component {
-  render() {
-    return (
-      <>
+export default function CenteredModal(props) {
+  return (
+    <>
         <Modal
-          show={this.props.show}
-          onShow={this.props.onShow}
-          onHide={this.props.onHide}
-          size={this.props.size}
-          dialogClassName={this.props.dialogClassName}
+          show={props.show}
+          onShow={props.onShow}
+          onHide={props.onHide}
+          size={props.size}
+          dialogClassName={props.dialogClassName}
           centered
         >
           <Modal.Header closeButton>
-            {this.props.title && <Modal.Title>{this.props.title}</Modal.Title>}
+            {props.title && <Modal.Title>{props.title}</Modal.Title>}
           </Modal.Header>
-          <Modal.Body>{this.props.children}</Modal.Body>
-          {(this.props.onSubmit || this.props.footer) && (
+          <Modal.Body>{props.children}</Modal.Body>
+          {(props.onSubmit || props.footer) && (
             <Modal.Footer>
-              {this.props.onSubmit && (
-                <Button variant="primary" onClick={this.props.onSubmit}>
+              {props.onSubmit && (
+                <Button variant="primary" onClick={props.onSubmit}>
                   Submit
                 </Button>
               )}
@@ -28,6 +27,6 @@ export default class CenteredModal extends Component {
           )}
         </Modal>
       </>
-    );
-  }
+  )
 }
+

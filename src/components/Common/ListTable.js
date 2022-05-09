@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 
-export default class ListTable extends Component {
-  render() {
-    return (
-      <>
+export default function ListTable(props) {
+  return (
+    <>
         <div className="table-responsive">
-          <table className="table table-hover">{this.props.children}</table>
+          <table className="table table-hover">{props.children}</table>
         </div>
       </>
-    );
-  }
+  )
 }
+
 
 ListTable.Header = ({ children }) => (
   <thead className="table-dark">{children}</thead>
