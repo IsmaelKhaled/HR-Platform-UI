@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as testActions from "../../redux/actions/testActions";
@@ -7,35 +7,32 @@ import { Button } from "react-bootstrap";
 import CenteredModal from "../Common/CenteredModal";
 import ListTable from "../Common/ListTable";
 
-class ListTests extends Component {
-  state = {
-    detailsModalShown: false,
-    detailsModalObject: {},
-  };
-  showDetailsModal = (obj) => {
-    this.setState({
-      detailsModalShown: true,
-      detailsModalObject: obj,
-    });
-  };
 
-  hideDetailsModal = () => {
-    this.setState({
-      detailsModalShown: false,
-    });
-  };
-  componentDidMount() {
-    const { tests, actions } = this.props;
+function TestListPage(props) {
+  const [detailsModalShown, setDetailsModalShown] = useState(false);
+  const [detailsModalObject, setDetailsModalObject] = useState({});
+
+  useEffect(() => {
+    const { tests, actions } = props;
 
     if (tests.length === 0) {
       actions.loadTests().catch((error) => {
         alert("Loading tests failed: " + error);
       });
     }
-  }
-  render() {
-    return (
-      <>
+  })
+
+  const showDetailsModal = (obj) => {
+    setDetailsModalShown(true);
+    setDetailsModalObject(obj);
+  };
+
+  const hideDetailsModal = () => {
+    setDetailsModalShown(false);
+  };
+
+  return (
+    <>
         <div className="d-flex">
           <Button
             variant="outline-dark"
@@ -47,7 +44,7 @@ class ListTests extends Component {
             New Test
           </Button>
         </div>
-        {this.props.tests.length > 0 && (
+        {props.tests.length > 0 && (
           <ListTable>
             <ListTable.Header>
               <tr>
@@ -60,8 +57,8 @@ class ListTests extends Component {
               </tr>
             </ListTable.Header>
             <ListTable.Body>
-              {this.props.tests.map((test) => (
-                <tr key={test.id} onClick={() => this.showDetailsModal(test)}>
+              {props.tests.map((test) => (
+                <tr key={test.id} onClick={() => showDetailsModal(test)}>
                   <td>{test.name}</td>
                   <td className="d-none d-md-table-cell">{test.duration}</td>
                   <td>
@@ -87,23 +84,24 @@ class ListTests extends Component {
           </ListTable>
         )}
         <CenteredModal
-          show={this.state.detailsModalShown}
-          title={this.state.detailsModalObject.name}
-          onHide={this.hideDetailsModal}
+          show={detailsModalShown}
+          title={detailsModalObject.name}
+          onHide={hideDetailsModal}
         >
           <ul>
-            <li>{this.state.detailsModalObject.name}</li>
-            <li>{this.state.detailsModalObject.duration} minutes</li>
+            <li>{detailsModalObject.name}</li>
+            <li>{detailsModalObject.duration} minutes</li>
             <li>
-              {this.state.detailsModalObject.acceptanceScore} /{" "}
-              {this.state.detailsModalObject.maxScore}
+              {detailsModalObject.acceptanceScore} /{" "}
+              {detailsModalObject.maxScore}
             </li>
           </ul>
         </CenteredModal>
       </>
-    );
-  }
+  )
 }
+
+
 
 function mapStateToProps(state) {
   return {
@@ -119,4 +117,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListTests);
+export default connect(mapStateToProps, mapDispatchToProps)(TestListPage);

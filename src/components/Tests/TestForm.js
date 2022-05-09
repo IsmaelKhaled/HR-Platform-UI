@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import NumberInput from "../Common/FormInputs/NumberInput";
 import TextInput from "../Common/FormInputs/TextInput";
 import FormCard from "../Common/FormCard";
 
-export default class TestForm extends Component {
-  render() {
-    const title = this.props.test.id ? "Edit Test" : "Create New Test";
-    return (
-      <>
+
+export default function TestForm(props) {
+  const title = props.test.id ? "Edit Test" : "Create New Test";
+  return (
+    <>
         <FormCard
           title={title}
           formText={
@@ -16,38 +16,38 @@ export default class TestForm extends Component {
             </>
           }
         >
-          <form onSubmit={this.props.onSubmit} className="row gy-3">
+          <form onSubmit={props.onSubmit} className="row gy-3">
             <TextInput
               name="name"
               label="Name"
-              value={this.props.test.name}
-              onChange={this.props.onChange}
+              value={props.test.name}
+              onChange={props.onChange}
               required
             />
             <NumberInput
               name="maxScore"
               label="Max Score"
-              value={this.props.test.maxScore}
-              onChange={this.props.onChange}
+              value={props.test.maxScore}
+              onChange={props.onChange}
             />
             <NumberInput
               name="acceptanceScore"
               label="Acceptance Score"
-              value={this.props.test.acceptanceScore}
-              onChange={this.props.onChange}
+              value={props.test.acceptanceScore}
+              onChange={props.onChange}
             />
             <TextInput
               name="URL"
               label="Test URL"
-              value={this.props.test.URL}
-              onChange={this.props.onChange}
+              value={props.test.URL}
+              onChange={props.onChange}
               required
             />
             <NumberInput
               name="duration"
               label="Duration"
-              value={this.props.test.duration}
-              onChange={this.props.onChange}
+              value={props.test.duration}
+              onChange={props.onChange}
               required
             />
             <button className="btn btn-primary col-6 offset-3" type="submit">
@@ -56,6 +56,5 @@ export default class TestForm extends Component {
           </form>
         </FormCard>
       </>
-    );
-  }
+  )
 }
