@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as groupActions from "../../redux/actions/groupActions";
@@ -7,93 +7,81 @@ import GroupSelectForm from "./GroupSelectForm";
 import CreateGroupModal from "./CreateGroupModal";
 import FormCard from "../Common/FormCard";
 
-class InterviewForm extends Component {
-  state = {
-    createModalShow: false,
-    newGroupName: "",
-  };
+function InterviewForm(props) {
+  const [createModalShow, setCreateModalShow] = useState(false);
+  const [newGroupName, setNewGroupName] = useState("");
 
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const value =
       event.target.type === "checkbox"
         ? event.target.checked
         : event.target.value;
-    this.setState({
-      ...this.state,
-      [event.target.name]: value,
-    });
+    setNewGroupName(value);
   };
 
-  handleCreateGroupSubmit = (e) => {
+  const handleCreateGroupSubmit = (e) => {
     e.preventDefault();
-    this.props.actions
-      .createGroup(this.state.newGroupName)
+    props.actions
+      .createGroup(newGroupName)
       .then(() => {
-        this.setState({ createModalShow: false });
+        setCreateModalShow(false);
       })
       .catch((error) => {
         alert("Creating new group failed: " + error);
       });
   };
 
-  showModal = () => {
-    this.setState({ createModalShow: true });
+  const showModal = () => {
+    setCreateModalShow(true);
   };
 
-  hideModal = () => {
-    this.setState({ createModalShow: false });
+  const hideModal = () => {
+    setCreateModalShow(false);
   };
+  const title = props.interview.id ? "Edit Interview" : "Create Interview";
 
-  render() {
-    const title = this.props.interview.id
-      ? "Edit Interview"
-      : "Create Interview";
-    return (
-      <>
-        <FormCard title={title}>
-          <div className="input-group">
-            <input
-              type="text"
-              id="interview-name"
-              name="name"
-              className="form-control"
-              value={this.props.interview.name}
-              onChange={this.props.handleInterviewChange}
-            />
-            <button className="btn btn-success" onClick={this.props.onSave}>
-              Save Interview
-            </button>
-          </div>
+  return (
+    <FormCard title={title}>
+      <div className="input-group">
+        <input
+          type="text"
+          id="interview-name"
+          name="name"
+          className="form-control"
+          value={props.interview.name}
+          onChange={props.handleInterviewChange}
+        />
+        <button className="btn btn-success" onClick={props.onSave}>
+          Save Interview
+        </button>
+      </div>
 
-          <GroupSelectForm
-            handleGroupAddSubmit={this.props.handleGroupAddSubmit}
-            groups={this.props.groups}
-            handleChange={this.props.onChange}
-            selectedGroupId={this.props.selectedGroupId}
-            showModal={this.showModal}
-          />
+      <GroupSelectForm
+        handleGroupAddSubmit={props.handleGroupAddSubmit}
+        groups={props.groups}
+        handleChange={props.onChange}
+        selectedGroupId={props.selectedGroupId}
+        showModal={showModal}
+      />
 
-          <GroupsList
-            focusGroups={this.props.interview.groups.focus.map((groupId) =>
-              this.props.groups.find((group) => group.id === groupId)
-            )}
-            additionalGroups={this.props.interview.groups.additional.map(
-              (groupId) =>
-                this.props.groups.find((group) => group.id === groupId)
-            )}
-          />
+      <GroupsList
+        focusGroups={props.interview.groups.focus.map((groupId) =>
+          props.groups.find((group) => group.id === groupId)
+        )}
+        additionalGroups={props.interview.groups.additional.map((groupId) =>
+          props.groups.find((group) => group.id === groupId)
+        )}
+      />
 
-          <CreateGroupModal
-            hideModal={this.hideModal}
-            showModal={this.showModal}
-            show={this.state.createModalShow}
-            handleCreateGroupSubmit={this.handleCreateGroupSubmit}
-            onChange={this.handleChange}
-          />
-        </FormCard>
-      </>
-    );
-  }
+      <CreateGroupModal
+        hideModal={hideModal}
+        showModal={showModal}
+        show={createModalShow}
+        handleCreateGroupSubmit={handleCreateGroupSubmit}
+        onChange={handleChange}
+      />
+    </FormCard>
+  );
 }
 
 function mapStateToProps(state) {

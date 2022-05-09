@@ -1,22 +1,30 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { connect, useSelector } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as groupActions from "../../redux/actions/groupActions";
 import * as interviewActions from "../../redux/actions/interviewActions";
 import { withRouter } from "../Common/Wrappers/withRouter";
 import InterviewForm from "./InterviewForm";
 import { emptyInterview } from "../../json-mock-api/mockData";
+import { useNavigate, useParams } from "react-router-dom";
 
-class ManageInterview extends React.Component {
-  state = {
+function InterviewManagePage(props) {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [state, setState] = useState({
     selectedGroupId: "",
     focusGroupChecked: false,
     createModalShow: false,
-    interview: this.props.interview,
-  };
+    interview: useSelector((state) =>
+      id && state.interviews.length > 0
+        ? getInterviewById(state.interviews, id)
+        : emptyInterview
+    ),
+  });
 
-  componentDidMount() {
-    const { groups, interviews, actions } = this.props;
+  useEffect(() => {
+    const { groups, interviews, actions } = props;
 
     if (groups.length === 0) {
       actions.loadGroups().catch((error) => {
@@ -28,93 +36,83 @@ class ManageInterview extends React.Component {
         alert("Loading interviews failed: " + error);
       });
     }
-  }
+  });
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.interview !== this.props.interview) {
-      this.setState({ interview: this.props.interview });
-    }
-  }
-
-  handleGroupAddSubmit = (e) => {
+  const handleGroupAddSubmit = (e) => {
     e.preventDefault();
-    const groupId = this.state.selectedGroupId;
-    const groupsIds = this.state.interview.groups.focus.concat(
-      this.state.interview.groups.additional
+    const groupId = state.selectedGroupId;
+    const groupsIds = state.interview.groups.focus.concat(
+      state.interview.groups.additional
     );
     if (groupsIds.filter((x) => x === groupId).length > 0) {
       alert("This group is already added!");
       return;
     }
-    if (this.state.focusGroupChecked) {
-      this.setState({
+    if (state.focusGroupChecked) {
+      setState({
         interview: {
-          ...this.state.interview,
+          ...state.interview,
           groups: {
-            ...this.state.interview.groups,
-            focus: [...this.state.interview.groups.focus, groupId],
+            ...state.interview.groups,
+            focus: [...state.interview.groups.focus, groupId],
           },
         },
       });
     } else {
-      this.setState({
+      setState({
         interview: {
-          ...this.state.interview,
+          ...state.interview,
           groups: {
-            ...this.state.interview.groups,
-            additional: [...this.state.interview.groups.additional, groupId],
+            ...state.interview.groups,
+            additional: [...state.interview.groups.additional, groupId],
           },
         },
       });
     }
   };
 
-  handleChange = (event) => {
+  const handleChange = (event) => {
     const value =
       event.target.type === "checkbox"
         ? event.target.checked
         : event.target.value;
-    this.setState({
-      ...this.state,
+    setState({
+      ...state,
       [event.target.name]: value,
     });
   };
 
-  handleInterviewChange = (event) => {
-    this.setState({
+  const handleInterviewChange = (event) => {
+    setState({
       interview: {
-        ...this.state.interview,
+        ...state.interview,
         [event.target.name]: event.target.value,
       },
     });
   };
 
-  handleSave = () => {
-    this.props.actions
-      .saveInterview(this.state.interview)
+  const handleSave = () => {
+    props.actions
+      .saveInterview(state.interview)
       .then(() => {
-        this.props.navigate("/interviews/");
+        navigate("/interviews/");
       })
       .catch((error) => {
         alert("Saving interview failed: " + error);
       });
   };
 
-  render() {
-    return (
-      <>
-        <InterviewForm
-          interview={this.state.interview}
-          groups={this.props.groups}
-          onSave={this.handleSave}
-          onChange={this.handleChange}
-          handleInterviewChange={this.handleInterviewChange}
-          selectedGroupId={this.state.selectedGroupId}
-          handleGroupAddSubmit={this.handleGroupAddSubmit}
-        />
-      </>
-    );
-  }
+  return (
+    <InterviewForm
+      interview={state.interview}
+      groups={props.groups}
+      onSave={handleSave}
+      onChange={handleChange}
+      handleInterviewChange={handleInterviewChange}
+      selectedGroupId={state.selectedGroupId}
+      handleGroupAddSubmit={handleGroupAddSubmit}
+    />
+  );
 }
 
 export function getInterviewById(interviews, id) {
@@ -151,6 +149,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ManageInterview)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(InterviewManagePage);
