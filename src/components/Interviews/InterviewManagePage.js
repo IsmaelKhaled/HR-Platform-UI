@@ -3,7 +3,6 @@ import { connect, useSelector } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import * as groupActions from "../../redux/actions/groupActions";
 import * as interviewActions from "../../redux/actions/interviewActions";
-import { withRouter } from "../Common/Wrappers/withRouter";
 import InterviewForm from "./InterviewForm";
 import { emptyInterview } from "../../json-mock-api/mockData";
 import { useNavigate, useParams } from "react-router-dom";

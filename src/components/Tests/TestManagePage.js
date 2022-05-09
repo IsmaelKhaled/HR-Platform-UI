@@ -5,16 +5,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import TestForm from "./TestForm";
 import * as testActions from "../../redux/actions/testActions";
-import {emptyTest} from "../../json-mock-api/mockData"
-
-
+import { emptyTest } from "../../json-mock-api/mockData";
 
 function TestManagePage(props) {
   const navigate = useNavigate();
-  const {id} = useParams();
-  const [test, setTest] = useState(useSelector((state) => id && state.tests.length > 0 ? getTestById(state.tests, id):emptyTest));
-  
-  useEffect(() =>{
+  const { id } = useParams();
+  const [test, setTest] = useState(
+    useSelector((state) =>
+      id && state.tests.length > 0 ? getTestById(state.tests, id) : emptyTest
+    )
+  );
+
+  useEffect(() => {
     const { tests, actions } = props;
 
     if (tests.length === 0) {
@@ -22,10 +24,10 @@ function TestManagePage(props) {
         alert("Loading tests failed: " + error);
       });
     }
-  })
+  });
 
   const handleChange = (event) => {
-    setTest({...test, [event.target.name]:event.target.value})
+    setTest({ ...test, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = (event) => {
@@ -39,15 +41,11 @@ function TestManagePage(props) {
   };
   return (
     <>
-        <div className="col-md-6 offset-md-3 col">
-          <TestForm
-            test={test}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-          />
-        </div>
-      </>
-  )
+      <div className="col-md-6 offset-md-3 col">
+        <TestForm test={test} onChange={handleChange} onSubmit={handleSubmit} />
+      </div>
+    </>
+  );
 }
 
 function getTestById(tests, id) {
@@ -69,6 +67,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default 
-  connect(mapStateToProps, mapDispatchToProps)(TestManagePage)
-;
+export default connect(mapStateToProps, mapDispatchToProps)(TestManagePage);
