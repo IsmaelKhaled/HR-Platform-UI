@@ -15,17 +15,17 @@ function InterviewListPage(props) {
   useEffect(() => {
     const { interviews, groups, actions } = props;
 
-    if (interviews.length === 0) {
+    if (!interviews) {
       actions.loadInterviews().catch((error) => {
         alert("Loading interviews failed: " + error);
       });
     }
-    if (groups.length === 0) {
+    if (!groups) {
       actions.loadGroups().catch((error) => {
         alert("Loading groups failed: " + error);
       });
     }
-  });
+  }, []);
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -49,7 +49,7 @@ function InterviewListPage(props) {
           New Interview
         </Button>
       </div>
-      {props.interviews.length > 0 && (
+      {props.interviews?.length > 0 ? (
         <ListTable>
           <ListTable.Header>
             <tr>
@@ -87,6 +87,8 @@ function InterviewListPage(props) {
             ))}
           </ListTable.Body>
         </ListTable>
+      ) : (
+        <h2 className="text-muted text-center display-2">No interviews yet</h2>
       )}
       <CenteredModal
         show={detailsModalShown}

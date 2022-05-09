@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 export default {
-  groups: [],
-  interviews: [],
-  tests: [],
-  processes: [],
+  groups: null,
+  interviews: null,
+  tests: null,
+  processes: null,
 };

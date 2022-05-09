@@ -16,7 +16,7 @@ function InterviewManagePage(props) {
     focusGroupChecked: false,
     createModalShow: false,
     interview: useSelector((state) =>
-      id && state.interviews.length > 0
+      id && state.interviews
         ? getInterviewById(state.interviews, id)
         : emptyInterview
     ),
@@ -25,17 +25,25 @@ function InterviewManagePage(props) {
   useEffect(() => {
     const { groups, interviews, actions } = props;
 
-    if (groups.length === 0) {
+    if (!groups) {
       actions.loadGroups().catch((error) => {
         alert("Loading groups failed: " + error);
       });
     }
-    if (interviews.length === 0) {
+    if (!interviews) {
       actions.loadInterviews().catch((error) => {
         alert("Loading interviews failed: " + error);
       });
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    if (id && props.interviews && props.interviews.length > 0) {
+      setState({
+        interview: getInterviewById(props.interviews, id) || emptyInterview,
+      });
+    }
+  }, [props.interviews, id]);
 
   const handleGroupAddSubmit = (e) => {
     e.preventDefault();

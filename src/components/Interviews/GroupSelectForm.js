@@ -17,7 +17,7 @@ export default function GroupSelectForm(props) {
               <option value="" className="text-muted">
                 Select Group
               </option>
-              {props.groups.map((group) => (
+              {props.groups?.map((group) => (
                 <option key={group.id} value={group.id}>
                   {group.name}
                 </option>

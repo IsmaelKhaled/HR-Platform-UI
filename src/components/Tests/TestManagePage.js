@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "@reduxjs/toolkit";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import TestForm from "./TestForm";
 import * as testActions from "../../redux/actions/testActions";
 import { emptyTest } from "../../json-mock-api/mockData";
@@ -10,21 +9,23 @@ import { emptyTest } from "../../json-mock-api/mockData";
 function TestManagePage(props) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [test, setTest] = useState(
-    useSelector((state) =>
-      id && state.tests.length > 0 ? getTestById(state.tests, id) : emptyTest
-    )
-  );
+  const [test, setTest] = useState(emptyTest);
 
   useEffect(() => {
     const { tests, actions } = props;
 
-    if (tests.length === 0) {
+    if (!tests) {
       actions.loadTests().catch((error) => {
         alert("Loading tests failed: " + error);
       });
     }
   });
+
+  useEffect(() => {
+    if (id && props.tests && props.tests.length > 0) {
+      setTest(getTestById(props.tests, id) || emptyTest);
+    }
+  }, [props.tests, id]);
 
   const handleChange = (event) => {
     setTest({ ...test, [event.target.name]: event.target.value });

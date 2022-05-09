@@ -14,7 +14,7 @@ function TestListPage(props) {
   useEffect(() => {
     const { tests, actions } = props;
 
-    if (tests.length === 0) {
+    if (!tests) {
       actions.loadTests().catch((error) => {
         alert("Loading tests failed: " + error);
       });
@@ -43,7 +43,7 @@ function TestListPage(props) {
           New Test
         </Button>
       </div>
-      {props.tests.length > 0 && (
+      {props.tests?.length > 0 && (
         <ListTable>
           <ListTable.Header>
             <tr>
