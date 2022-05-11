@@ -1,5 +1,4 @@
 import React from "react";
-import NumberInput from "../Common/FormInputs/NumberInput";
 import TextInput from "../Common/FormInputs/TextInput";
 import FormCard from "../Common/FormCard";
 import ProcessSteps from "./ProcessSteps";
@@ -24,13 +23,13 @@ export default function ProcessForm(props) {
             onChange={props.onChange}
             required
           />
-          <NumberInput
+          <TextInput
             name="description"
             label="Description"
             value={props.process.description}
             onChange={props.onChange}
           />
-          <ProcessSteps steps={props.process.steps} />
+          <ProcessSteps steps={props.process.steps} setSteps={props.setSteps} />
           <button className="btn btn-primary col-6 offset-3" type="submit">
             Save
           </button>

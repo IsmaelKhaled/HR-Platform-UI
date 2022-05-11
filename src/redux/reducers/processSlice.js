@@ -8,12 +8,12 @@ export default function processesReducer(
   switch (action.type) {
     case types.LOAD_PROCESSES_SUCCESS:
       return action.processes;
-    // case types.CREATE_INTERVIEW_SUCCESS:
-    //   return [...state, action.interview];
-    // case types.UPDATE_INTERVIEW_SUCCESS:
-    //   return state.map((interview) =>
-    //     interview.id === action.interview.id ? action.interview : interview
-    //   );
+    case types.CREATE_PROCESS_SUCCESS:
+      return [...state, action.process];
+    case types.UPDATE_PROCESS_SUCCESS:
+      return state.map((process) =>
+        process.id === action.process.id ? action.process : process
+      );
     default:
       return state;
   }

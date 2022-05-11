@@ -56,8 +56,8 @@ const processes = [
     description:
       "The process for a Junior Frontend Developer position at Luftborn.",
     steps: {
-      tests: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cc8", priority: 1 }],
-      interviews: [{ id: "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1", priority: 2 }],
+      tests: [{ id: "0ab258f3-6967-4378-976a-ff2d0c316b51", priority: 1 }],
+      interviews: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cc9", priority: 2 }],
     },
   },
   {
@@ -66,8 +66,8 @@ const processes = [
     description:
       "The process for a Junior Backend Developer position at Luftborn.",
     steps: {
-      tests: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cc8", priority: 1 }],
-      interviews: [{ id: "9b52ab19-10eb-4f47-9106-a3ca54c5c0f1", priority: 2 }],
+      tests: [{ id: "89be8a88-91ad-4180-93ee-c16217347e95", priority: 1 }],
+      interviews: [{ id: "17fa833a-c6cc-4988-aba0-78c010178cd8", priority: 2 }],
     },
   },
 ];

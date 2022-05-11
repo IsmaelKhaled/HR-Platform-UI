@@ -15,7 +15,7 @@ function ProcessListPage(props) {
   useEffect(() => {
     const { processes, actions } = props;
 
-    if (processes.length === 0) {
+    if (!processes) {
       actions.loadProcesses().catch((error) => {
         alert("Loading processes failed: " + error);
       });
@@ -43,7 +43,7 @@ function ProcessListPage(props) {
           New Process
         </Button>
       </div>
-      {props.processes.length > 0 && (
+      {props.processes?.length > 0 && (
         <ListTable>
           <ListTable.Header>
             <tr>
