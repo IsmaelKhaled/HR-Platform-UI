@@ -125,6 +125,10 @@ function ProcessSteps({ setSteps, ...props }) {
     }
   };
 
+  const removeStep = (stepId) => {
+    setStepsArray(stepsArray.filter((step) => step.id !== stepId));
+  };
+
   return (
     <>
       <div className="row g-2 align-items-center justify-content-center">
@@ -143,7 +147,11 @@ function ProcessSteps({ setSteps, ...props }) {
             <div className="mt-2" id="steps">
               <ReactSortable list={stepsArray} setList={setStepsArray}>
                 {stepsArray.map((step) => (
-                  <ProcessStepCard step={step} key={step.id} />
+                  <ProcessStepCard
+                    step={step}
+                    key={step.id}
+                    removeStep={removeStep}
+                  />
                 ))}
               </ReactSortable>
             </div>

@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function ProcessStepCard({ step }) {
+export default function ProcessStepCard({ step, removeStep }) {
+  const [showDelete, setShowDelete] = useState(false);
   return (
-    <div className="card mb-3 shadow-sm rounded border-0">
+    <div
+      className="card mb-3 shadow-sm rounded border-0"
+      onMouseEnter={() => setShowDelete(true)}
+      onMouseLeave={() => setShowDelete(false)}
+    >
       <div className="card-header">
         {step.name && (
-          <h5 className="card-title d-flex align-items-center m-1">
+          <h5 className="card-title d-flex align-items-center m-1 step-card">
             {step.name}
-            <span className="d-flex ms-auto badge bg-primary text-white text-uppercase">
-              {step.type}
+            <span className="d-md-flex ms-auto">
+              <span className="badge bg-primary text-white text-uppercase">
+                {step.type}
+              </span>
+            </span>
+            <span
+              className={
+                "d-flex ms-2" + (showDelete ? " d-block" : " d-md-none")
+              }
+            >
+              <button
+                type="button"
+                onClick={() => removeStep(step.id)}
+                className={"btn btn-outline-danger"}
+              >
+                &minus;
+              </button>
             </span>
           </h5>
         )}

@@ -18,8 +18,8 @@ $sidebar-width: 250px;
   height: $topnav-height;
 }
 
-.modal{
-  z-index:6000;
+.modal {
+  z-index: 6000;
 }
 
 @media screen and (min-width: 768px) {
@@ -30,9 +30,11 @@ $sidebar-width: 250px;
     top: $topnav-height;
     z-index: 3000;
 
-    .sidebar-header, .components, .CTAs {
-        width: $sidebar-width;
-      }
+    .sidebar-header,
+    .components,
+    .CTAs {
+      width: $sidebar-width;
+    }
   }
 
   .overlay {
@@ -54,8 +56,6 @@ $sidebar-width: 250px;
     opacity: 0.3;
     transition: opacity 0.35s ease-in-out;
   }
-
-  
 }
 
 @media screen and (max-width: 767px) {
@@ -65,9 +65,16 @@ $sidebar-width: 250px;
     top: $topnav-height; // Top navbar height
     z-index: 3000;
 
-    .sidebar-header, .components, .CTAs{
-        width:100vw;
-        transition: width 0.35s ease-in-out;
+    .sidebar-header,
+    .components,
+    .CTAs {
+      width: 100vw;
+      transition: width 0.35s ease-in-out;
     }
   }
+}
+
+.step-card {
+  height: 25.5px;
+  transition: height 0.6s ease-in-out;
 }
