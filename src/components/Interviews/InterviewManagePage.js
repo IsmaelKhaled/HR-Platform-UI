@@ -1,49 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import * as groupActions from "../../redux/actions/groupActions";
-import * as interviewActions from "../../redux/actions/interviewActions";
+import { useSelector } from "react-redux";
 import InterviewForm from "./InterviewForm";
 import { emptyInterview } from "../../json-mock-api/mockData";
 import { useNavigate, useParams } from "react-router-dom";
+import { useGetAllGroupsQuery } from "../../redux/services/group";
+import {
+  useGetAllInterviewsQuery,
+  useSaveInterviewMutation,
+} from "../../redux/services/interview";
 
-function InterviewManagePage(props) {
+function InterviewManagePage() {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const { data: groups, isLoading: groupsIsLoading } = useGetAllGroupsQuery();
+  const { data: interviews, isLoading: interviewsIsLoading } =
+    useGetAllInterviewsQuery();
+
+  const [saveInterview] = useSaveInterviewMutation();
 
   const [state, setState] = useState({
     selectedGroupId: "",
     focusGroupChecked: false,
     createModalShow: false,
     interview: useSelector((state) =>
-      id && state.interviews
-        ? getInterviewById(state.interviews, id)
+      id && interviews?.length > 0
+        ? getInterviewById(interviews, id)
         : emptyInterview
     ),
   });
 
   useEffect(() => {
-    const { groups, interviews, actions } = props;
-
-    if (!groups) {
-      actions.loadGroups().catch((error) => {
-        alert("Loading groups failed: " + error);
-      });
-    }
-    if (!interviews) {
-      actions.loadInterviews().catch((error) => {
-        alert("Loading interviews failed: " + error);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (id && props.interviews && props.interviews.length > 0) {
-      setState({
-        interview: getInterviewById(props.interviews, id) || emptyInterview,
-      });
-    }
-  }, [props.interviews, id]);
+    setState({
+      interview:
+        id && interviews?.length > 0
+          ? getInterviewById(interviews, id)
+          : emptyInterview,
+    });
+  }, [id, interviews]);
 
   const handleGroupAddSubmit = (e) => {
     e.preventDefault();
@@ -99,8 +93,7 @@ function InterviewManagePage(props) {
   };
 
   const handleSave = () => {
-    props.actions
-      .saveInterview(state.interview)
+    saveInterview({ interview: state.interview })
       .then(() => {
         navigate("/interviews/");
       })
@@ -110,15 +103,21 @@ function InterviewManagePage(props) {
   };
 
   return (
-    <InterviewForm
-      interview={state.interview}
-      groups={props.groups}
-      onSave={handleSave}
-      onChange={handleChange}
-      handleInterviewChange={handleInterviewChange}
-      selectedGroupId={state.selectedGroupId}
-      handleGroupAddSubmit={handleGroupAddSubmit}
-    />
+    <>
+      {groupsIsLoading || interviewsIsLoading ? (
+        "Loading..."
+      ) : (
+        <InterviewForm
+          interview={state.interview}
+          groups={groups}
+          onSave={handleSave}
+          onChange={handleChange}
+          handleInterviewChange={handleInterviewChange}
+          selectedGroupId={state.selectedGroupId}
+          handleGroupAddSubmit={handleGroupAddSubmit}
+        />
+      )}
+    </>
   );
 }
 
@@ -126,30 +125,4 @@ export function getInterviewById(interviews, id) {
   return interviews.find((interview) => interview.id === id) || null;
 }
 
-function mapStateToProps(state) {
-  return {
-    groups: state.groups,
-    interviews: state.interviews,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadGroups: bindActionCreators(groupActions.loadGroups, dispatch),
-      saveInterview: bindActionCreators(
-        interviewActions.saveInterview,
-        dispatch
-      ),
-      loadInterviews: bindActionCreators(
-        interviewActions.loadInterviews,
-        dispatch
-      ),
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(InterviewManagePage);
+export default InterviewManagePage;

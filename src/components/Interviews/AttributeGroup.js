@@ -1,26 +1,16 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import * as groupActions from "../../redux/actions/groupActions";
+import {
+  useAddGroupAttributeMutation,
+  useDeleteGroupAttributeMutation,
+} from "../../redux/services/group";
 
 function AttributeGroup(props) {
   const [attrInput, setAttrInput] = useState("");
+  const [addAttribute] = useAddGroupAttributeMutation();
+  const [deleteAttribute] = useDeleteGroupAttributeMutation();
 
   const handleChange = (e) => {
     setAttrInput(e.target.value);
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let group = props.group;
-    props.actions.addAttribute(group, attrInput).catch((error) => {
-      alert("Adding attribute failed: " + error);
-    });
-  };
-  const handleRemove = (attr) => {
-    let group = props.group;
-    props.actions.removeAttribute(group, attr).catch((error) => {
-      alert("Removing attribute failed: " + error);
-    });
   };
 
   return (
@@ -28,7 +18,10 @@ function AttributeGroup(props) {
       <div className="row align-items-center mt-2">
         <p className="d-inline-block col-auto mb-0">{props.group.name}</p>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            addAttribute({ group: props.group, attr: attrInput });
+          }}
           className="row d-flex mb-2 ms-md-auto col-sm-6 col-xs"
         >
           <div className="input-group">
@@ -56,7 +49,7 @@ function AttributeGroup(props) {
             <div className="col-9">{attr}</div>
             <button
               className="btn btn-danger"
-              onClick={() => handleRemove(attr)}
+              onClick={() => deleteAttribute({ group: props.group, attr })}
             >
               Delete
             </button>
@@ -67,22 +60,4 @@ function AttributeGroup(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    groups: state.groups,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      addAttribute: bindActionCreators(groupActions.addAttribute, dispatch),
-      removeAttribute: bindActionCreators(
-        groupActions.removeAttribute,
-        dispatch
-      ),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AttributeGroup);
+export default AttributeGroup;

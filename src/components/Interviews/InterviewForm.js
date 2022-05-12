@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import * as groupActions from "../../redux/actions/groupActions";
 import GroupsList from "./GroupsList";
 import GroupSelectForm from "./GroupSelectForm";
 import CreateGroupModal from "./CreateGroupModal";
 import FormCard from "../Common/FormCard";
+import {
+  useCreateGroupMutation,
+  useGetAllGroupsQuery,
+} from "../../redux/services/group";
 
 function InterviewForm(props) {
   const [createModalShow, setCreateModalShow] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+  const [createGroup] = useCreateGroupMutation();
+
+  const { data: groups } = useGetAllGroupsQuery();
 
   const handleChange = (event) => {
     const value =
@@ -21,14 +25,9 @@ function InterviewForm(props) {
 
   const handleCreateGroupSubmit = (e) => {
     e.preventDefault();
-    props.actions
-      .createGroup(newGroupName)
-      .then(() => {
-        setCreateModalShow(false);
-      })
-      .catch((error) => {
-        alert("Creating new group failed: " + error);
-      });
+    createGroup({ name: newGroupName }).then(() => {
+      setCreateModalShow(false);
+    });
   };
 
   const showModal = () => {
@@ -58,7 +57,7 @@ function InterviewForm(props) {
 
       <GroupSelectForm
         handleGroupAddSubmit={props.handleGroupAddSubmit}
-        groups={props.groups}
+        groups={groups}
         handleChange={props.onChange}
         selectedGroupId={props.selectedGroupId}
         showModal={showModal}
@@ -66,10 +65,10 @@ function InterviewForm(props) {
 
       <GroupsList
         focusGroups={props.interview.groups.focus.map((groupId) =>
-          props.groups.find((group) => group.id === groupId)
+          groups.find((group) => group.id === groupId)
         )}
         additionalGroups={props.interview.groups.additional.map((groupId) =>
-          props.groups.find((group) => group.id === groupId)
+          groups.find((group) => group.id === groupId)
         )}
       />
 
@@ -84,18 +83,4 @@ function InterviewForm(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    groups: state.groups,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      createGroup: bindActionCreators(groupActions.createGroup, dispatch),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InterviewForm);
+export default InterviewForm;

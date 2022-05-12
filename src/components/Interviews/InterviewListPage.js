@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import * as interviewActions from "../../redux/actions/interviewActions";
-import * as groupActions from "../../redux/actions/groupActions";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ListTable from "../Common/ListTable";
 import CenteredModal from "../Common/CenteredModal";
 import { Button } from "react-bootstrap";
+import { useGetAllGroupsQuery } from "../../redux/services/group";
+import { useGetAllInterviewsQuery } from "../../redux/services/interview";
 
 function InterviewListPage(props) {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
-
-  useEffect(() => {
-    const { interviews, groups, actions } = props;
-
-    if (!interviews) {
-      actions.loadInterviews().catch((error) => {
-        alert("Loading interviews failed: " + error);
-      });
-    }
-    if (!groups) {
-      actions.loadGroups().catch((error) => {
-        alert("Loading groups failed: " + error);
-      });
-    }
-  }, []);
+  const { data: groups } = useGetAllGroupsQuery();
+  const { data: interviews } = useGetAllInterviewsQuery();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -49,7 +34,7 @@ function InterviewListPage(props) {
           New Interview
         </Button>
       </div>
-      {props.interviews?.length > 0 ? (
+      {interviews?.length > 0 ? (
         <ListTable>
           <ListTable.Header>
             <tr>
@@ -59,7 +44,7 @@ function InterviewListPage(props) {
             </tr>
           </ListTable.Header>
           <ListTable.Body>
-            {props.interviews.map((interview) => (
+            {interviews.map((interview) => (
               <tr
                 key={interview.id}
                 onClick={() => showDetailsModal(interview)}
@@ -100,7 +85,7 @@ function InterviewListPage(props) {
             Focus Groups:{" "}
             <ul>
               {detailsModalObject.groups?.focus.map((group) => (
-                <li>{props.groups.find((x) => x.id === group).name}</li>
+                <li key={group}>{groups.find((x) => x.id === group).name}</li>
               ))}
             </ul>
           </li>
@@ -108,7 +93,7 @@ function InterviewListPage(props) {
             Additional Groups:{" "}
             <ul>
               {detailsModalObject.groups?.additional.map((group) => (
-                <li>{props.groups.find((x) => x.id === group).name}</li>
+                <li key={group}>{groups.find((x) => x.id === group).name}</li>
               ))}
             </ul>
           </li>
@@ -118,23 +103,4 @@ function InterviewListPage(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    interviews: state.interviews,
-    groups: state.groups,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadInterviews: bindActionCreators(
-        interviewActions.loadInterviews,
-        dispatch
-      ),
-      loadGroups: bindActionCreators(groupActions.loadGroups, dispatch),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InterviewListPage);
+export default InterviewListPage;
