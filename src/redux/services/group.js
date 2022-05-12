@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { axiosBaseQuery } from "./serviceUtils";
+import { apiToEndpoint, axiosBaseQuery } from "./serviceUtils";
 import * as groupApi from "../../api/groupApi";
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
@@ -9,10 +9,11 @@ export const groupService = createApi({
   baseQuery: axiosBaseQuery({ baseUrl: `${baseUrl}/groups` }),
   endpoints: (builder) => ({
     getAllGroups: builder.query({
-      queryFn: () =>
-        groupApi.getGroups().then((data) => {
-          return { data };
-        }),
+      //   queryFn: () =>
+      //     groupApi.getGroups().then((data) => {
+      //       return { data };
+      //     }),
+      queryFn: () => apiToEndpoint(groupApi.getGroups()),
       providesTags: (result) =>
         // is result available?
         result
@@ -25,10 +26,11 @@ export const groupService = createApi({
             [{ type: "Groups", id: "LIST" }],
     }),
     createGroup: builder.mutation({
-      queryFn: (args) =>
-        groupApi.createGroup(args.name).then((data) => {
-          return { data };
-        }),
+      //   queryFn: (args) =>
+      //     groupApi.createGroup(args.name).then((data) => {
+      //       return { data };
+      //     }),
+      queryFn: (args) => apiToEndpoint(groupApi.createGroup(args.name)),
       invalidatesTags: () => [{ type: "Groups", id: "LIST" }],
     }),
     addGroupAttribute: builder.mutation({
