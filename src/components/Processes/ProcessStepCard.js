@@ -10,10 +10,13 @@ export default function ProcessStepCard({ step, removeStep }) {
     >
       <div className="card-header">
         {step.name && (
-          <h5 className="card-title d-flex align-items-center m-1 step-card">
+          <h5
+            className="card-title d-flex align-items-center m-1"
+            style={{ height: "25.5px" }}
+          >
             {step.name}
             <span className="d-md-flex ms-auto">
-              <span className="badge bg-primary text-white text-uppercase">
+              <span className="badge rounded-pill bg-primary text-white text-uppercase">
                 {step.type}
               </span>
             </span>
