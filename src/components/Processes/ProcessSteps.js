@@ -9,6 +9,7 @@ import { useGetAllInterviewsQuery } from "../../redux/services/interview";
 
 function ProcessSteps({ setSteps, ...props }) {
   const [stepsArray, setStepsArray] = useState([]);
+  const [currentSteps, setCurrentSteps] = useState(props.steps);
   const [showStepModal, setShowStepModal] = useState(false);
   const [selectedStepId, setSelectedStepId] = useState();
   const [selectedStepType, setSelectedStepType] = useState();
@@ -21,44 +22,77 @@ function ProcessSteps({ setSteps, ...props }) {
     if (
       interviews &&
       tests &&
-      props.steps.interviews.length > 0 &&
-      props.steps.tests.length > 0
+      (props.steps.interviews.length > 0 || props.steps.tests.length > 0)
     ) {
-      const interviewSteps = props.steps.interviews.map((interview) => {
-        return {
-          ...interviews.find((i) => i.id === interview.id),
-          priority: interview.priority,
-          type: "interview",
-        };
-      });
-      const testSteps = props.steps.tests.map((test) => {
-        return {
-          ...tests.find((t) => t.id === test.id),
-          priority: test.priority,
-          type: "test",
-        };
-      });
+      const interviewSteps =
+        props.steps.interviews.length > 0
+          ? props.steps.interviews.map((interview) => {
+              return {
+                ...interviews.find((i) => i.id === interview.id),
+                priority: interview.priority,
+                type: "interview",
+                chosen: false,
+              };
+            })
+          : [];
+      const testSteps =
+        props.steps.tests.length > 0
+          ? props.steps.tests.map((test) => {
+              return {
+                ...tests.find((t) => t.id === test.id),
+                priority: test.priority,
+                type: "test",
+                chosen: false,
+              };
+            })
+          : [];
 
       const arr = [...testSteps, ...interviewSteps].sort((x, y) =>
         x.priority < y.priority ? -1 : 1
       );
       setStepsArray(arr);
     }
-  }, [interviews, tests]);
+  }, [interviews, tests, props.steps]);
 
   useEffect(() => {
-    if (stepsArray.length > 0) {
-      const interviews = [];
-      const tests = [];
-      stepsArray.map(({ type, id }, i) => {
-        return type === "interview"
-          ? interviews.push({ id, priority: i + 1 })
-          : tests.push({ id, priority: i + 1 });
-      });
-      const steps = { interviews, tests };
-      setSteps(steps);
+    //TODO: Cleanup this method
+    if (!stepsArray.length > 0) return;
+    const updatedStepsArr = stepsArray.map((step, i) => ({
+      ...step,
+      priority: i + 1,
+    }));
+    const interviewSteps = updatedStepsArr
+      .filter((step) => step.type === "interview")
+      .map((step) =>
+        props.steps.interviews.findIndex(
+          (interview) => interview.id === step.id
+        ) > -1
+          ? {
+              ...props.steps.interviews.find(
+                (interview) => interview.id === step.id
+              ),
+              priority: step.priority,
+            }
+          : { id: step.id, priority: step.priority }
+      );
+    const testSteps = updatedStepsArr
+      .filter((step) => step.type === "test")
+      .map((step) =>
+        props.steps.tests.findIndex((test) => test.id === step.id) > -1
+          ? {
+              ...props.steps.tests.find((test) => test.id === step.id),
+              priority: step.priority,
+            }
+          : { id: step.id, priority: step.priority }
+      );
+    setCurrentSteps({ interviews: interviewSteps, tests: testSteps });
+  }, [stepsArray, props.steps]);
+
+  useEffect(() => {
+    if (JSON.stringify(props.steps) !== JSON.stringify(currentSteps)) {
+      setSteps(currentSteps);
     }
-  }, [stepsArray]);
+  }, [setSteps, props.steps, currentSteps]);
 
   const handleNewStep = () => {
     if (!selectedStepType) return;
@@ -82,6 +116,7 @@ function ProcessSteps({ setSteps, ...props }) {
       ]);
     }
     setShowStepModal(false);
+    setStepSelectOptions([]);
   };
 
   const handleStepTypeChange = (e) => {
