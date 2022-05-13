@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { bindActionCreators } from "@reduxjs/toolkit";
 import { Button } from "react-bootstrap";
-import { connect } from "react-redux";
 import { ReactSortable } from "react-sortablejs";
 
-import * as interviewActions from "../../redux/actions/interviewActions";
-import * as testActions from "../../redux/actions/testActions";
 import ProcessStepCard from "./ProcessStepCard";
 import CenteredModal from "../Common/CenteredModal";
+import { useGetAllTestsQuery } from "../../redux/services/test";
+import { useGetAllInterviewsQuery } from "../../redux/services/interview";
 
 function ProcessSteps({ setSteps, ...props }) {
   const [stepsArray, setStepsArray] = useState([]);
@@ -16,50 +14,37 @@ function ProcessSteps({ setSteps, ...props }) {
   const [selectedStepType, setSelectedStepType] = useState();
   const [stepSelectOptions, setStepSelectOptions] = useState([]);
 
-  useEffect(() => {
-    const { tests, interviews, actions } = props;
-
-    if (!tests) {
-      actions.loadTests().catch((error) => {
-        alert("Loading tests failed: " + error);
-      });
-    }
-
-    if (!interviews) {
-      actions.loadInterviews().catch((error) => {
-        alert("Loading interviews failed: " + error);
-      });
-    }
-  }, [props]);
+  const { data: tests } = useGetAllTestsQuery();
+  const { data: interviews } = useGetAllInterviewsQuery();
 
   useEffect(() => {
     if (
-      props.interviews &&
-      props.tests &&
+      interviews &&
+      tests &&
       props.steps.interviews.length > 0 &&
       props.steps.tests.length > 0
     ) {
-      const interviews = props.steps.interviews.map((interview) => {
+      const interviewSteps = props.steps.interviews.map((interview) => {
         return {
-          ...props.interviews.find((i) => i.id === interview.id),
+          ...interviews.find((i) => i.id === interview.id),
           priority: interview.priority,
           type: "interview",
         };
       });
-      const tests = props.steps.tests.map((test) => {
+      const testSteps = props.steps.tests.map((test) => {
         return {
-          ...props.tests.find((t) => t.id === test.id),
+          ...tests.find((t) => t.id === test.id),
           priority: test.priority,
           type: "test",
         };
       });
 
-      const arr = [...tests, ...interviews].sort((x, y) =>
+      const arr = [...testSteps, ...interviewSteps].sort((x, y) =>
         x.priority < y.priority ? -1 : 1
       );
       setStepsArray(arr);
     }
-  }, [props.interviews, props.tests]);
+  }, [interviews, tests]);
 
   useEffect(() => {
     if (stepsArray.length > 0) {
@@ -82,9 +67,7 @@ function ProcessSteps({ setSteps, ...props }) {
       setStepsArray([
         ...stepsArray,
         {
-          ...props.interviews?.find(
-            (interview) => interview.id === selectedStepId
-          ),
+          ...interviews?.find((interview) => interview.id === selectedStepId),
           type: "interview",
         },
       ]);
@@ -93,7 +76,7 @@ function ProcessSteps({ setSteps, ...props }) {
       setStepsArray([
         ...stepsArray,
         {
-          ...props.tests?.find((test) => test.id === selectedStepId),
+          ...tests?.find((test) => test.id === selectedStepId),
           type: "test",
         },
       ]);
@@ -109,7 +92,7 @@ function ProcessSteps({ setSteps, ...props }) {
         .filter((step) => step.type === "interview")
         .map((interview) => interview.id);
       setStepSelectOptions(
-        props.interviews
+        interviews
           ?.filter((interview) => !selectedInterviewsIds.includes(interview.id))
           .map((interview) => ({ id: interview.id, name: interview.name }))
       );
@@ -118,7 +101,7 @@ function ProcessSteps({ setSteps, ...props }) {
         .filter((step) => step.type === "test")
         .map((test) => test.id);
       setStepSelectOptions(
-        props.tests
+        tests
           ?.filter((test) => !selectedTestsIds.includes(test.id))
           .map((test) => ({ id: test.id, name: test.name }))
       );
@@ -205,23 +188,4 @@ function ProcessSteps({ setSteps, ...props }) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    tests: state.tests,
-    interviews: state.interviews,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadTests: bindActionCreators(testActions.loadTests, dispatch),
-      loadInterviews: bindActionCreators(
-        interviewActions.loadInterviews,
-        dispatch
-      ),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProcessSteps);
+export default ProcessSteps;

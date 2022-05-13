@@ -1,32 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
 import { useNavigate, useParams } from "react-router-dom";
 
-import * as processActions from "../../redux/actions/processActions";
 import { emptyProcess } from "../../json-mock-api/mockData";
 import ProcessForm from "./ProcessForm";
+import {
+  useGetAllProcessesQuery,
+  useSaveProcessMutation,
+} from "../../redux/services/process";
 
-function ProcessManagePage({ processes, actions }) {
+function ProcessManagePage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const { data: processes } = useGetAllProcessesQuery();
+  const [saveProcess] = useSaveProcessMutation();
+
   const [state, setState] = useState({
     createModalShow: false,
-    process: useSelector((state) =>
-      id && state.processes?.length > 0
-        ? getProcessById(state.processes, id)
-        : emptyProcess
-    ),
+    process:
+      id && processes?.length > 0
+        ? getProcessById(processes, id)
+        : emptyProcess,
   });
-
-  useEffect(() => {
-    if (!processes) {
-      actions.loadProcesses().catch((error) => {
-        alert("Loading processes failed: " + error);
-      });
-    }
-  }, [actions, processes]);
 
   useEffect(() => {
     if (id && processes?.length > 0) {
@@ -53,8 +48,8 @@ function ProcessManagePage({ processes, actions }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    actions
-      .saveProcess(state.process)
+
+    saveProcess({ process: state.process })
       .then(() => {
         navigate("/processes/");
       })
@@ -77,19 +72,4 @@ export function getProcessById(processes, id) {
   return processes.find((process) => process.id === id) || null;
 }
 
-function mapStateToProps(state) {
-  return {
-    processes: state.processes,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      saveProcess: bindActionCreators(processActions.saveProcess, dispatch),
-      loadProcesses: bindActionCreators(processActions.loadProcesses, dispatch),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProcessManagePage);
+export default ProcessManagePage;

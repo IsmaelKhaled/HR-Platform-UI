@@ -1,13 +1,9 @@
-import { handleResponse, handleError } from "./apiUtils";
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
 
 export function getInterviews() {
-  return axios
-    .get(`${baseUrl}/interviews`)
-    .then(handleResponse)
-    .catch(handleError);
+  return axios.get(`${baseUrl}/interviews`);
 }
 
 export function saveInterview(interview) {
@@ -19,7 +15,5 @@ export function saveInterview(interview) {
       ...interview,
       id: interview.id ? interview.id : crypto.randomUUID(),
     },
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  });
 }

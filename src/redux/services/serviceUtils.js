@@ -25,14 +25,3 @@ axios.interceptors.request.use(async (config) => {
   };
   return config;
 });
-
-export const apiToEndpoint = (method) => {
-  method
-    .then((data) => {
-      console.log(data);
-      return { data };
-    })
-    .catch((error) => {
-      return { error };
-    });
-};

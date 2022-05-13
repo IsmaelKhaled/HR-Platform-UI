@@ -1,13 +1,9 @@
-import { handleResponse, handleError } from "./apiUtils";
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
 
 export function getProcesses() {
-  return axios
-    .get(`${baseUrl}/processes`)
-    .then(handleResponse)
-    .catch(handleError);
+  return axios.get(`${baseUrl}/processes`);
 }
 
 export function saveProcess(process) {
@@ -19,7 +15,5 @@ export function saveProcess(process) {
       ...process,
       id: process.id ? process.id : crypto.randomUUID(),
     },
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  });
 }

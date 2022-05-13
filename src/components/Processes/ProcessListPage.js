@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
+import React, { useState } from "react";
 
-import * as processActions from "../../redux/actions/processActions";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ListTable from "../Common/ListTable";
 import CenteredModal from "../Common/CenteredModal";
+import { useGetAllProcessesQuery } from "../../redux/services/process";
 
-function ProcessListPage(props) {
+function ProcessListPage() {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
 
-  useEffect(() => {
-    const { processes, actions } = props;
-
-    if (!processes) {
-      actions.loadProcesses().catch((error) => {
-        alert("Loading processes failed: " + error);
-      });
-    }
-  });
+  const { data: processes } = useGetAllProcessesQuery();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -43,7 +33,7 @@ function ProcessListPage(props) {
           New Process
         </Button>
       </div>
-      {props.processes?.length > 0 && (
+      {processes?.length > 0 && (
         <ListTable>
           <ListTable.Header>
             <tr>
@@ -54,7 +44,7 @@ function ProcessListPage(props) {
             </tr>
           </ListTable.Header>
           <ListTable.Body>
-            {props.processes.map((process) => (
+            {processes.map((process) => (
               <tr key={process.id} onClick={() => showDetailsModal(process)}>
                 <td>{process.name}</td>
                 <td className="d-none d-md-table-cell">
@@ -94,18 +84,4 @@ function ProcessListPage(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    processes: state.processes,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadProcesses: bindActionCreators(processActions.loadProcesses, dispatch),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProcessListPage);
+export default ProcessListPage;

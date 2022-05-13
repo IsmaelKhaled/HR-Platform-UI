@@ -1,25 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "@reduxjs/toolkit";
-import * as testActions from "../../redux/actions/testActions";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import CenteredModal from "../Common/CenteredModal";
 import ListTable from "../Common/ListTable";
+import { useGetAllTestsQuery } from "../../redux/services/test";
 
 function TestListPage(props) {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
 
-  useEffect(() => {
-    const { tests, actions } = props;
-
-    if (!tests) {
-      actions.loadTests().catch((error) => {
-        alert("Loading tests failed: " + error);
-      });
-    }
-  });
+  const { data: tests } = useGetAllTestsQuery();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -43,7 +33,7 @@ function TestListPage(props) {
           New Test
         </Button>
       </div>
-      {props.tests?.length > 0 && (
+      {tests?.length > 0 && (
         <ListTable>
           <ListTable.Header>
             <tr>
@@ -56,7 +46,7 @@ function TestListPage(props) {
             </tr>
           </ListTable.Header>
           <ListTable.Body>
-            {props.tests.map((test) => (
+            {tests.map((test) => (
               <tr key={test.id} onClick={() => showDetailsModal(test)}>
                 <td>{test.name}</td>
                 <td className="d-none d-md-table-cell">{test.duration}</td>
@@ -99,18 +89,4 @@ function TestListPage(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    tests: state.tests,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: {
-      loadTests: bindActionCreators(testActions.loadTests, dispatch),
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TestListPage);
+export default TestListPage;

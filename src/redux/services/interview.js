@@ -8,10 +8,7 @@ export const interviewService = createApi({
   baseQuery: axiosBaseQuery({ baseUrl: `${baseUrl}/interviews` }),
   endpoints: (builder) => ({
     getAllInterviews: builder.query({
-      queryFn: () =>
-        interviewApi.getInterviews().then((data) => {
-          return { data };
-        }),
+      queryFn: async () => await interviewApi.getInterviews(),
       providesTags: (result) =>
         result
           ? [
@@ -21,10 +18,7 @@ export const interviewService = createApi({
           : [{ type: "Interviews", id: "LIST" }],
     }),
     saveInterview: builder.mutation({
-      queryFn: (args, ...rest) =>
-        interviewApi.saveInterview(args.interview).then((data) => {
-          return { data };
-        }),
+      queryFn: async (args) => await interviewApi.saveInterview(args.interview),
       invalidatesTags: (result, error, { id }) => [{ type: "Interviews", id }],
     }),
   }),

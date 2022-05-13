@@ -1,10 +1,9 @@
-import { handleResponse, handleError } from "./apiUtils";
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
 
 export function getTests() {
-  return axios.get(`${baseUrl}/tests`).then(handleResponse).catch(handleError);
+  return axios.get(`${baseUrl}/tests`);
 }
 
 export function saveTest(test) {
@@ -16,7 +15,5 @@ export function saveTest(test) {
       ...test,
       id: test.id ? test.id : crypto.randomUUID(),
     },
-  })
-    .then(handleResponse)
-    .catch(handleError);
+  });
 }
