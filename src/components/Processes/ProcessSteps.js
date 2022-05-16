@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { Button } from "react-bootstrap";
 import { ReactSortable } from "react-sortablejs";
 
@@ -7,9 +12,8 @@ import CenteredModal from "../Common/CenteredModal";
 import { useGetAllTestsQuery } from "../../redux/services/test";
 import { useGetAllInterviewsQuery } from "../../redux/services/interview";
 
-function ProcessSteps({ setSteps, ...props }) {
+const ProcessSteps = forwardRef(({ ...props }, ref) => {
   const [stepsArray, setStepsArray] = useState([]);
-  const [currentSteps, setCurrentSteps] = useState(props.steps);
   const [showStepModal, setShowStepModal] = useState(false);
   const [selectedStepId, setSelectedStepId] = useState();
   const [selectedStepType, setSelectedStepType] = useState();
@@ -54,47 +58,7 @@ function ProcessSteps({ setSteps, ...props }) {
     }
   }, [interviews, tests, props.steps]);
 
-  useEffect(() => {
-    //TODO: Cleanup this method
-    if (!stepsArray.length > 0) return;
-    const updatedStepsArr = stepsArray.map((step, i) => ({
-      ...step,
-      priority: i + 1,
-    }));
-    const interviewSteps = updatedStepsArr
-      .filter((step) => step.type === "interview")
-      .map((step) =>
-        props.steps.interviews.findIndex(
-          (interview) => interview.id === step.id
-        ) > -1
-          ? {
-              ...props.steps.interviews.find(
-                (interview) => interview.id === step.id
-              ),
-              priority: step.priority,
-            }
-          : { id: step.id, priority: step.priority }
-      );
-    const testSteps = updatedStepsArr
-      .filter((step) => step.type === "test")
-      .map((step) =>
-        props.steps.tests.findIndex((test) => test.id === step.id) > -1
-          ? {
-              ...props.steps.tests.find((test) => test.id === step.id),
-              priority: step.priority,
-            }
-          : { id: step.id, priority: step.priority }
-      );
-    setCurrentSteps({ interviews: interviewSteps, tests: testSteps });
-  }, [stepsArray, props.steps]);
-
-  useEffect(() => {
-    if (JSON.stringify(props.steps) !== JSON.stringify(currentSteps)) {
-      setSteps(currentSteps);
-    }
-  }, [setSteps, props.steps, currentSteps]);
-
-  const handleNewStep = () => {
+  const addStep = () => {
     if (!selectedStepType) return;
     if (!selectedStepId) return;
     if (selectedStepType === "interview") {
@@ -117,6 +81,10 @@ function ProcessSteps({ setSteps, ...props }) {
     }
     setShowStepModal(false);
     setStepSelectOptions([]);
+  };
+
+  const removeStep = (stepId) => {
+    setStepsArray(stepsArray.filter((step) => step.id !== stepId));
   };
 
   const handleStepTypeChange = (e) => {
@@ -143,9 +111,40 @@ function ProcessSteps({ setSteps, ...props }) {
     }
   };
 
-  const removeStep = (stepId) => {
-    setStepsArray(stepsArray.filter((step) => step.id !== stepId));
-  };
+  useImperativeHandle(ref, () => ({
+    getSortedSteps() {
+      if (!stepsArray.length > 0) return;
+      const updatedStepsArr = stepsArray.map((step, i) => ({
+        ...step,
+        priority: i + 1,
+      }));
+      const interviewSteps = updatedStepsArr
+        .filter((step) => step.type === "interview")
+        .map((step) =>
+          props.steps.interviews.findIndex(
+            (interview) => interview.id === step.id
+          ) > -1
+            ? {
+                ...props.steps.interviews.find(
+                  (interview) => interview.id === step.id
+                ),
+                priority: step.priority,
+              }
+            : { id: step.id, priority: step.priority }
+        );
+      const testSteps = updatedStepsArr
+        .filter((step) => step.type === "test")
+        .map((step) =>
+          props.steps.tests.findIndex((test) => test.id === step.id) > -1
+            ? {
+                ...props.steps.tests.find((test) => test.id === step.id),
+                priority: step.priority,
+              }
+            : { id: step.id, priority: step.priority }
+        );
+      return { tests: testSteps, interviews: interviewSteps };
+    },
+  }));
 
   return (
     <>
@@ -181,7 +180,7 @@ function ProcessSteps({ setSteps, ...props }) {
         show={showStepModal}
         title="Add a step"
         onHide={() => setShowStepModal(false)}
-        onSubmit={handleNewStep}
+        onSubmit={addStep}
       >
         <form>
           <div className="input-group mb-2">
@@ -221,6 +220,6 @@ function ProcessSteps({ setSteps, ...props }) {
       </CenteredModal>
     </>
   );
-}
+});
 
 export default ProcessSteps;

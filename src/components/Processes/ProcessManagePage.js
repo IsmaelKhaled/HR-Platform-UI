@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { emptyProcess } from "../../json-mock-api/mockData";
-import ProcessForm from "./ProcessForm";
 import {
   useGetAllProcessesQuery,
   useSaveProcessMutation,
 } from "../../redux/services/process";
+import FormCard from "../Common/FormCard";
+import TextInput from "../Common/FormInputs/TextInput";
+import ProcessSteps from "./ProcessSteps";
 
 function ProcessManagePage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const stepsRef = useRef();
 
   const { data: processes } = useGetAllProcessesQuery();
   const [saveProcess] = useSaveProcessMutation();
@@ -42,14 +45,13 @@ function ProcessManagePage() {
     });
   };
 
-  const setSteps = (steps) => {
-    setState({ process: { ...state.process, steps } });
-  };
-
   const handleSave = (e) => {
     e.preventDefault();
 
-    saveProcess({ process: state.process })
+    const sortedSteps = stepsRef.current.getSortedSteps();
+    const process = { ...state.process, steps: sortedSteps };
+
+    saveProcess({ process })
       .then(() => {
         navigate("/processes/");
       })
@@ -58,13 +60,37 @@ function ProcessManagePage() {
       });
   };
 
+  const title = state.process.id ? "Edit Process" : "Create New Process";
+
   return (
-    <ProcessForm
-      process={state.process}
-      onSubmit={handleSave}
-      onChange={handleChange}
-      setSteps={setSteps}
-    />
+    <FormCard
+      title={title}
+      formText={
+        <>
+          <span className="text-danger">*</span> indicates required fields
+        </>
+      }
+    >
+      <form onSubmit={handleSave} className="row gy-3">
+        <TextInput
+          name="name"
+          label="Name"
+          value={state.process.name}
+          onChange={handleChange}
+          required
+        />
+        <TextInput
+          name="description"
+          label="Description"
+          value={state.process.description}
+          onChange={handleChange}
+        />
+        <ProcessSteps steps={state.process.steps} ref={stepsRef} />
+        <button className="btn btn-primary col-6 offset-3" type="submit">
+          Save
+        </button>
+      </form>
+    </FormCard>
   );
 }
 
