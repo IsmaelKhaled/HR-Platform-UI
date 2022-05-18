@@ -17,3 +17,11 @@ export function saveInterview(interview) {
     },
   });
 }
+
+export function deleteInterview(interview) {
+  return axios({
+    url: `${baseUrl}/interviews/${interview.id}`,
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+  });
+}

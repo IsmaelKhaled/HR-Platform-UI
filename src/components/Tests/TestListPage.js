@@ -3,13 +3,17 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import CenteredModal from "../Common/CenteredModal";
 import ListTable from "../Common/ListTable";
-import { useGetAllTestsQuery } from "../../redux/services/test";
+import {
+  useDeleteTestMutation,
+  useGetAllTestsQuery,
+} from "../../redux/services/test";
 
 function TestListPage(props) {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
 
   const { data: tests } = useGetAllTestsQuery();
+  const [deleteTest] = useDeleteTestMutation();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -19,7 +23,6 @@ function TestListPage(props) {
   const hideDetailsModal = () => {
     setDetailsModalShown(false);
   };
-
   return (
     <>
       <div className="d-flex">
@@ -33,7 +36,7 @@ function TestListPage(props) {
           New Test
         </Button>
       </div>
-      {tests?.length > 0 && (
+      {tests?.length > 0 ? (
         <ListTable>
           <ListTable.Header>
             <tr>
@@ -42,6 +45,7 @@ function TestListPage(props) {
                 Duration <div className="text-muted">(in minutes)</div>
               </th>
               <th>Acceptance Score</th>
+              <th>Created By</th>
               <th></th>
             </tr>
           </ListTable.Header>
@@ -53,9 +57,10 @@ function TestListPage(props) {
                 <td>
                   {test.acceptanceScore} / {test.maxScore}
                 </td>
+                <td>{test.createdBy || "-"}</td>
                 <td>
                   <div className="d-flex justify-content-end">
-                    <div className="btn-group">
+                    <div className="btn-group flex-column flex-md-row">
                       <Button
                         as={Link}
                         to={`/tests/${test.id}`}
@@ -63,7 +68,14 @@ function TestListPage(props) {
                       >
                         Edit
                       </Button>
-                      <Button variant="outline-danger">Delete</Button>
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          deleteTest({ test });
+                        }}
+                      >
+                        Delete
+                      </Button>
                     </div>
                   </div>
                 </td>
@@ -71,6 +83,8 @@ function TestListPage(props) {
             ))}
           </ListTable.Body>
         </ListTable>
+      ) : (
+        <h2 className="text-muted text-center display-2">No tests yet</h2>
       )}
       <CenteredModal
         show={detailsModalShown}

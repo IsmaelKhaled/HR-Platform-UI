@@ -4,13 +4,18 @@ import ListTable from "../Common/ListTable";
 import CenteredModal from "../Common/CenteredModal";
 import { Button } from "react-bootstrap";
 import { useGetAllGroupsQuery } from "../../redux/services/group";
-import { useGetAllInterviewsQuery } from "../../redux/services/interview";
+import {
+  useDeleteInterviewMutation,
+  useGetAllInterviewsQuery,
+} from "../../redux/services/interview";
 
 function InterviewListPage(props) {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
   const { data: groups } = useGetAllGroupsQuery();
   const { data: interviews } = useGetAllInterviewsQuery();
+
+  const [deleteInterview] = useDeleteInterviewMutation();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -40,6 +45,7 @@ function InterviewListPage(props) {
             <tr>
               <th>Name</th>
               <th>Groups</th>
+              <th>Created by</th>
               <th></th>
             </tr>
           </ListTable.Header>
@@ -54,6 +60,7 @@ function InterviewListPage(props) {
                   {interview.groups.focus.length +
                     interview.groups.additional.length}
                 </td>
+                <td>{interview.createdBy || "-"}</td>
                 <td>
                   <div className="d-flex justify-content-end">
                     <div className="btn-group">
@@ -64,7 +71,12 @@ function InterviewListPage(props) {
                       >
                         Edit
                       </Button>
-                      <Button variant="outline-danger">Delete</Button>
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => deleteInterview({ interview })}
+                      >
+                        Delete
+                      </Button>
                     </div>
                   </div>
                 </td>

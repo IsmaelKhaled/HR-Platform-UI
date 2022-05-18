@@ -4,13 +4,18 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ListTable from "../Common/ListTable";
 import CenteredModal from "../Common/CenteredModal";
-import { useGetAllProcessesQuery } from "../../redux/services/process";
+import {
+  useDeleteProcessMutation,
+  useGetAllProcessesQuery,
+} from "../../redux/services/process";
 
 function ProcessListPage() {
   const [detailsModalShown, setDetailsModalShown] = useState(false);
   const [detailsModalObject, setDetailsModalObject] = useState({});
 
   const { data: processes } = useGetAllProcessesQuery();
+
+  const [deleteProcess] = useDeleteProcessMutation();
 
   const showDetailsModal = (obj) => {
     setDetailsModalShown(true);
@@ -33,13 +38,14 @@ function ProcessListPage() {
           New Process
         </Button>
       </div>
-      {processes?.length > 0 && (
+      {processes?.length > 0 ? (
         <ListTable>
           <ListTable.Header>
             <tr>
               <th>Name</th>
               <th className="d-none d-md-table-cell">Description</th>
               <th># of Steps</th>
+              <th>Created by</th>
               <th></th>
             </tr>
           </ListTable.Header>
@@ -50,7 +56,10 @@ function ProcessListPage() {
                 <td className="d-none d-md-table-cell">
                   {process.description}
                 </td>
-                <td></td>
+                <td>
+                  {process.steps.tests.length + process.steps.interviews.length}
+                </td>
+                <td>{process.createdBy || "-"}</td>
                 <td>
                   <div className="d-flex justify-content-end">
                     <div className="btn-group">
@@ -61,7 +70,12 @@ function ProcessListPage() {
                       >
                         Edit
                       </Button>
-                      <Button variant="outline-danger">Delete</Button>
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => deleteProcess({ process })}
+                      >
+                        Delete
+                      </Button>
                     </div>
                   </div>
                 </td>
@@ -69,6 +83,8 @@ function ProcessListPage() {
             ))}
           </ListTable.Body>
         </ListTable>
+      ) : (
+        <h2 className="text-muted text-center display-2">No processes yet</h2>
       )}
       <CenteredModal
         show={detailsModalShown}

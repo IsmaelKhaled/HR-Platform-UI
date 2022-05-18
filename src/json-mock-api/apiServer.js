@@ -54,6 +54,19 @@ server.post("/interviews", function (req, res, next) {
   }
 });
 
+server.get("/users/byids/", function (req, res, next) {
+  const ids = req.query.ids;
+  const users = router.db
+    .get("users")
+    .value()
+    .filter((user) => ids.indexOf(user.id) !== -1);
+  if (users)
+    res
+      .status(200)
+      .send(users.map((user) => ({ id: user.id, name: user.name })));
+  else next();
+});
+
 server.put("/interviews/:id", function (req, res, next) {
   const error = validateInterview(req.body);
   if (error) {
@@ -80,7 +93,6 @@ server.listen(port, () => {
 // Centralized logic
 
 function validateInterview(interview) {
-  console.log(interview);
   if (!interview.name) return "Interview name is required.";
   if (interview.groups.length < 1) return "Please add at least 1 group.";
   return "";

@@ -17,3 +17,12 @@ export function saveProcess(process) {
     },
   });
 }
+
+
+export function deleteProcess(process) {
+  return axios({
+    url: `${baseUrl}/processes/${process.id}`,
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+  });
+}

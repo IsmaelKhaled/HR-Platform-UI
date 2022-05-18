@@ -17,3 +17,11 @@ export function saveTest(test) {
     },
   });
 }
+
+export function deleteTest(test) {
+  return axios({
+    url: `${baseUrl}/tests/${test.id}`,
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+  });
+}

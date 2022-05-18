@@ -36,9 +36,9 @@ export default function TestForm(props) {
             onChange={props.onChange}
           />
           <TextInput
-            name="URL"
+            name="url"
             label="Test URL"
-            value={props.test.URL}
+            value={props.test.url}
             onChange={props.onChange}
             required
           />
